@@ -40,6 +40,18 @@
     .help-button:hover {
       background: #0b7dda;
     }
+    .warning-button {
+      background: #f44336;
+    }
+    .warning-button:hover {
+      background: #d32f2f;
+    }
+    .secondary-button {
+      background: #607d8b;
+    }
+    .secondary-button:hover {
+      background: #455a64;
+    }
     .modal {
       display: none;
       position: fixed;
@@ -79,10 +91,33 @@
     code {
       font-family: Consolas, Monaco, 'Andale Mono', monospace;
     }
+    .saved-plans {
+      margin: 15px 0;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+    .plan-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 8px 12px;
+      margin: 8px 0;
+      background-color: #f9f9f9;
+    }
+    .plan-title {
+      font-weight: bold;
+      flex-grow: 1;
+    }
+    .plan-actions {
+      display: flex;
+      gap: 5px;
+    }
   </style>
   <script>
     // Function to process the JSON data
-    function processData(data) {
+    function processData(data, savePlan = true) {
       document.getElementById('title').textContent = data.title;
       const list = document.getElementById('checklist');
       list.innerHTML = ''; // Clear previous content
@@ -150,9 +185,97 @@
         });
       });
       
+      // Save the timeline data to localStorage if requested
+      if (savePlan) {
+        saveTimelineToStorage(data);
+      }
+      
       // Show the meal plan content and hide the upload section
       document.getElementById('upload-section').classList.add('hidden');
       document.getElementById('content-section').classList.remove('hidden');
+    }
+
+    // Function to save timeline to localStorage
+    function saveTimelineToStorage(data) {
+      // Get the existing saved timelines
+      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+      
+      // Create a unique key using the title and timestamp
+      const timelineKey = `timeline_${Date.now()}`;
+      
+      // Add the new timeline
+      savedTimelines[timelineKey] = {
+        title: data.title,
+        data: data,
+        timestamp: Date.now()
+      };
+      
+      // Save back to localStorage
+      localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
+      
+      // Update the saved plans list in the UI
+      updateSavedPlansList();
+    }
+    
+    // Function to update the list of saved plans in the UI
+    function updateSavedPlansList() {
+      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+      const savedPlansContainer = document.getElementById('saved-plans-container');
+      
+      // Clear existing content
+      savedPlansContainer.innerHTML = '';
+      
+      if (Object.keys(savedTimelines).length === 0) {
+        savedPlansContainer.innerHTML = '<p>No saved meal plans yet.</p>';
+        document.getElementById('saved-plans-section').classList.add('hidden');
+        return;
+      }
+      
+      document.getElementById('saved-plans-section').classList.remove('hidden');
+      
+      // Sort by most recent first
+      const sortedKeys = Object.keys(savedTimelines).sort((a, b) => 
+        savedTimelines[b].timestamp - savedTimelines[a].timestamp
+      );
+      
+      // Create UI for each saved plan
+      sortedKeys.forEach(key => {
+        const plan = savedTimelines[key];
+        const planElement = document.createElement('div');
+        planElement.className = 'plan-item';
+        
+        planElement.innerHTML = `
+          <span class="plan-title">${plan.title}</span>
+          <div class="plan-actions">
+            <button class="load-plan-btn" data-key="${key}">Load</button>
+            <button class="delete-plan-btn warning-button" data-key="${key}">Delete</button>
+          </div>
+        `;
+        
+        savedPlansContainer.appendChild(planElement);
+      });
+      
+      // Add event listeners to the buttons
+      document.querySelectorAll('.load-plan-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const key = e.target.getAttribute('data-key');
+          const plan = savedTimelines[key];
+          processData(plan.data, false);
+        });
+      });
+      
+      document.querySelectorAll('.delete-plan-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const key = e.target.getAttribute('data-key');
+          
+          // Confirm before deleting
+          if (confirm(`Are you sure you want to delete "${savedTimelines[key].title}"?`)) {
+            delete savedTimelines[key];
+            localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
+            updateSavedPlansList();
+          }
+        });
+      });
     }
 
     // Function to handle file upload
@@ -175,6 +298,9 @@
 
     // Load default data on page load
     window.addEventListener('DOMContentLoaded', () => {
+      // Update saved plans list
+      updateSavedPlansList();
+      
       // Add event listener for file input
       document.getElementById('json-file').addEventListener('change', handleFileUpload);
       
@@ -189,6 +315,16 @@
             alert('Error loading default timeline: ' + error.message);
             console.error(error);
           });
+      });
+      
+      // Clear all saved data
+      document.getElementById('clear-all-data').addEventListener('click', () => {
+        if (confirm('Are you sure you want to delete all saved meal plans? This cannot be undone.')) {
+          localStorage.removeItem('savedTimelines');
+          localStorage.removeItem('checklistState');
+          updateSavedPlansList();
+          alert('All saved data has been deleted.');
+        }
       });
 
       // Modal functionality
@@ -264,8 +400,15 @@
       <button id="helpButton" class="help-button">Help with JSON Format</button>
       <button id="downloadExample">Download Example JSON</button>
     </div>
+    
+    <div id="saved-plans-section" class="saved-plans">
+      <h3>Your Saved Plans</h3>
+      <div id="saved-plans-container"></div>
+    </div>
+    
     <p>- or -</p>
     <button id="load-default">Load Default Timeline</button>
+    <button id="clear-all-data" class="warning-button">Clear All Saved Data</button>
   </div>
   
   <div id="helpModal" class="modal">
@@ -319,7 +462,7 @@
     <h2>Recipes</h2>
     <div id="recipes"></div>
     <button onclick="document.getElementById('upload-section').classList.remove('hidden'); document.getElementById('content-section').classList.add('hidden');">
-      Upload Different File
+      Back to Upload
     </button>
   </div>
 </body>
