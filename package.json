@@ -1,0 +1,17 @@
+{
+  "name": "mealstorm",
+  "version": "1.0.0",
+  "description": "A simple web application for managing meal plans and recipes",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "meal",
+    "recipe",
+    "planning"
+  ],
+  "author": "",
+  "license": "MIT"
+} 
