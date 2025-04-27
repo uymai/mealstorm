@@ -29,14 +29,95 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      margin: 5px;
     }
     button:hover {
       background: #45a049;
     }
+    .help-button {
+      background: #2196F3;
+    }
+    .help-button:hover {
+      background: #0b7dda;
+    }
+    .warning-button {
+      background: #f44336;
+    }
+    .warning-button:hover {
+      background: #d32f2f;
+    }
+    .secondary-button {
+      background: #607d8b;
+    }
+    .secondary-button:hover {
+      background: #455a64;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 700px;
+      border-radius: 5px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: black;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, Monaco, 'Andale Mono', monospace;
+    }
+    .saved-plans {
+      margin: 15px 0;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+    .plan-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 8px 12px;
+      margin: 8px 0;
+      background-color: #f9f9f9;
+    }
+    .plan-title {
+      font-weight: bold;
+      flex-grow: 1;
+    }
+    .plan-actions {
+      display: flex;
+      gap: 5px;
+    }
   </style>
   <script>
     // Function to process the JSON data
-    function processData(data) {
+    function processData(data, savePlan = true) {
       document.getElementById('title').textContent = data.title;
       const list = document.getElementById('checklist');
       list.innerHTML = ''; // Clear previous content
@@ -104,9 +185,97 @@
         });
       });
       
+      // Save the timeline data to localStorage if requested
+      if (savePlan) {
+        saveTimelineToStorage(data);
+      }
+      
       // Show the meal plan content and hide the upload section
       document.getElementById('upload-section').classList.add('hidden');
       document.getElementById('content-section').classList.remove('hidden');
+    }
+
+    // Function to save timeline to localStorage
+    function saveTimelineToStorage(data) {
+      // Get the existing saved timelines
+      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+      
+      // Create a unique key using the title and timestamp
+      const timelineKey = `timeline_${Date.now()}`;
+      
+      // Add the new timeline
+      savedTimelines[timelineKey] = {
+        title: data.title,
+        data: data,
+        timestamp: Date.now()
+      };
+      
+      // Save back to localStorage
+      localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
+      
+      // Update the saved plans list in the UI
+      updateSavedPlansList();
+    }
+    
+    // Function to update the list of saved plans in the UI
+    function updateSavedPlansList() {
+      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+      const savedPlansContainer = document.getElementById('saved-plans-container');
+      
+      // Clear existing content
+      savedPlansContainer.innerHTML = '';
+      
+      if (Object.keys(savedTimelines).length === 0) {
+        savedPlansContainer.innerHTML = '<p>No saved meal plans yet.</p>';
+        document.getElementById('saved-plans-section').classList.add('hidden');
+        return;
+      }
+      
+      document.getElementById('saved-plans-section').classList.remove('hidden');
+      
+      // Sort by most recent first
+      const sortedKeys = Object.keys(savedTimelines).sort((a, b) => 
+        savedTimelines[b].timestamp - savedTimelines[a].timestamp
+      );
+      
+      // Create UI for each saved plan
+      sortedKeys.forEach(key => {
+        const plan = savedTimelines[key];
+        const planElement = document.createElement('div');
+        planElement.className = 'plan-item';
+        
+        planElement.innerHTML = `
+          <span class="plan-title">${plan.title}</span>
+          <div class="plan-actions">
+            <button class="load-plan-btn" data-key="${key}">Load</button>
+            <button class="delete-plan-btn warning-button" data-key="${key}">Delete</button>
+          </div>
+        `;
+        
+        savedPlansContainer.appendChild(planElement);
+      });
+      
+      // Add event listeners to the buttons
+      document.querySelectorAll('.load-plan-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const key = e.target.getAttribute('data-key');
+          const plan = savedTimelines[key];
+          processData(plan.data, false);
+        });
+      });
+      
+      document.querySelectorAll('.delete-plan-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const key = e.target.getAttribute('data-key');
+          
+          // Confirm before deleting
+          if (confirm(`Are you sure you want to delete "${savedTimelines[key].title}"?`)) {
+            delete savedTimelines[key];
+            localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
+            updateSavedPlansList();
+          }
+        });
+      });
     }
 
     // Function to handle file upload
@@ -129,6 +298,9 @@
 
     // Load default data on page load
     window.addEventListener('DOMContentLoaded', () => {
+      // Update saved plans list
+      updateSavedPlansList();
+      
       // Add event listener for file input
       document.getElementById('json-file').addEventListener('change', handleFileUpload);
       
@@ -144,6 +316,76 @@
             console.error(error);
           });
       });
+      
+      // Clear all saved data
+      document.getElementById('clear-all-data').addEventListener('click', () => {
+        if (confirm('Are you sure you want to delete all saved meal plans? This cannot be undone.')) {
+          localStorage.removeItem('savedTimelines');
+          localStorage.removeItem('checklistState');
+          updateSavedPlansList();
+          alert('All saved data has been deleted.');
+        }
+      });
+
+      // Modal functionality
+      const modal = document.getElementById('helpModal');
+      const helpBtn = document.getElementById('helpButton');
+      const closeBtn = document.querySelector('.close');
+      
+      helpBtn.onclick = function() {
+        modal.style.display = 'block';
+      }
+      
+      closeBtn.onclick = function() {
+        modal.style.display = 'none';
+      }
+      
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      // Download example JSON functionality
+      document.getElementById('downloadExample').addEventListener('click', () => {
+        const exampleJSON = {
+          "title": "Example Dinner Plan",
+          "tasks": [
+            { "time": "4:00pm", "text": "Preheat oven to 425°F" },
+            { "time": "4:15pm", "text": "Start preparing vegetables" },
+            { "time": "4:30pm", "text": "Season and prepare chicken" },
+            { "time": "4:45pm", "text": "Place chicken in oven" }
+          ],
+          "recipes": [
+            {
+              "name": "Roast Chicken",
+              "ingredients": [
+                "1 whole chicken (4-5 lbs)",
+                "2 Tbsp olive oil",
+                "2 tsp kosher salt",
+                "1 tsp black pepper",
+                "3 cloves garlic, crushed",
+                "1 lemon, quartered"
+              ],
+              "instructions": [
+                "Preheat oven to 425°F",
+                "Rub chicken with olive oil, salt, and pepper",
+                "Place garlic and lemon inside cavity",
+                "Roast for 1 hour 15 minutes, until internal temperature reaches 165°F",
+                "Let rest for 15 minutes before carving"
+              ]
+            }
+          ]
+        };
+        
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exampleJSON, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "example_mealplan.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+      });
     });
   </script>
 </head>
@@ -154,8 +396,64 @@
     <h2>Upload Your Meal Plan</h2>
     <p>Upload a JSON file with your meal plan data or use our default timeline.</p>
     <input type="file" id="json-file" accept=".json">
+    <div style="margin: 15px 0;">
+      <button id="helpButton" class="help-button">Help with JSON Format</button>
+      <button id="downloadExample">Download Example JSON</button>
+    </div>
+    
+    <div id="saved-plans-section" class="saved-plans">
+      <h3>Your Saved Plans</h3>
+      <div id="saved-plans-container"></div>
+    </div>
+    
     <p>- or -</p>
     <button id="load-default">Load Default Timeline</button>
+    <button id="clear-all-data" class="warning-button">Clear All Saved Data</button>
+  </div>
+  
+  <div id="helpModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>How to Format Your JSON File</h2>
+      <p>Your JSON file should follow this structure:</p>
+      <pre><code>{
+  "title": "Your Meal Plan Title",
+  "tasks": [
+    { "time": "4:30pm", "text": "Preheat oven to 450°F" },
+    { "time": "4:45pm", "text": "Prepare the ingredients" },
+    { "time": "5:15pm", "text": "Start cooking" }
+  ],
+  "recipes": [
+    {
+      "name": "Recipe Name",
+      "ingredients": [
+        "Ingredient 1",
+        "Ingredient 2",
+        "Ingredient 3"
+      ],
+      "instructions": [
+        "Step 1 of the recipe",
+        "Step 2 of the recipe",
+        "Step 3 of the recipe"
+      ]
+    }
+  ]
+}</code></pre>
+      <h3>Required Fields:</h3>
+      <ul>
+        <li><strong>title</strong>: The title of your meal plan</li>
+        <li><strong>tasks</strong>: An array of tasks, each with a "time" and "text" field</li>
+        <li><strong>recipes</strong>: An array of recipes, each with:
+          <ul>
+            <li><strong>name</strong>: The recipe name</li>
+            <li><strong>ingredients</strong>: An array of ingredient strings</li>
+            <li><strong>instructions</strong>: An array of instruction step strings</li>
+          </ul>
+        </li>
+      </ul>
+      <p>You can add as many tasks and recipes as needed.</p>
+      <p>Click the "Download Example JSON" button below to get a template you can modify.</p>
+    </div>
   </div>
   
   <div id="content-section" class="hidden">
@@ -164,7 +462,7 @@
     <h2>Recipes</h2>
     <div id="recipes"></div>
     <button onclick="document.getElementById('upload-section').classList.remove('hidden'); document.getElementById('content-section').classList.add('hidden');">
-      Upload Different File
+      Back to Upload
     </button>
   </div>
 </body>
