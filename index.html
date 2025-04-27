@@ -4,86 +4,168 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mealstorm</title>
-  <script>
-    fetch('timeline.json')
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById('title').textContent = data.title;
-        const list = document.getElementById('checklist');
-  
-        // Load saved checked states
-        const savedState = JSON.parse(localStorage.getItem('checklistState')) || {};
-  
-        data.tasks.forEach((task, index) => {
-          const li = document.createElement('li');
-          const checkboxId = `task-${index}`;
-  
-          li.innerHTML = `
-            <label>
-              <input type="checkbox" id="${checkboxId}">
-              <strong>${task.time}</strong> - ${task.text}
-            </label>
-          `;
-          list.appendChild(li);
-  
-          // Restore checkbox state
-          const checkbox = document.getElementById(checkboxId);
-          checkbox.checked = savedState[checkboxId] || false;
-  
-          checkbox.addEventListener('change', () => {
-            savedState[checkboxId] = checkbox.checked;
-            localStorage.setItem('checklistState', JSON.stringify(savedState));
-          });
-        });
-  
-        // Now render recipes
-        // Render recipes with collapsible sections
-const recipesDiv = document.getElementById('recipes');
-data.recipes.forEach((recipe, index) => {
-  const section = document.createElement('section');
-  
-  const recipeId = `recipe-${index}`;
-
-  section.innerHTML = `
-    <h3 style="cursor: pointer;" data-toggle="${recipeId}">${recipe.name} &#x25BC;</h3>
-    <div id="${recipeId}" style="display: none; margin-bottom: 1rem;">
-      <h4>Ingredients</h4>
-      <ul>${recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}</ul>
-      <h4>Instructions</h4>
-      <ol>${recipe.instructions.map(step => `<li>${step}</li>`).join('')}</ol>
-    </div>
-  `;
-  
-  recipesDiv.appendChild(section);
-});
-
-// Add toggle behavior for recipe headings
-document.querySelectorAll('h3[data-toggle]').forEach(header => {
-  header.addEventListener('click', () => {
-    const targetId = header.getAttribute('data-toggle');
-    const contentDiv = document.getElementById(targetId);
-
-    if (contentDiv.style.display === 'none') {
-      contentDiv.style.display = 'block';
-      header.innerHTML = header.innerHTML.replace('&#x25BC;', '&#x25B2;'); // Down arrow ➔ Up arrow
-    } else {
-      contentDiv.style.display = 'none';
-      header.innerHTML = header.innerHTML.replace('&#x25B2;', '&#x25BC;'); // Up arrow ➔ Down arrow
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
     }
-  });
-});
-      })
-      .catch(error => {
-        document.getElementById('title').textContent = "Error loading checklist.";
-        console.error(error);
+    .file-upload {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px dashed #ccc;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .hidden {
+      display: none;
+    }
+    button {
+      padding: 8px 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+  <script>
+    // Function to process the JSON data
+    function processData(data) {
+      document.getElementById('title').textContent = data.title;
+      const list = document.getElementById('checklist');
+      list.innerHTML = ''; // Clear previous content
+      
+      // Load saved checked states
+      const savedState = JSON.parse(localStorage.getItem('checklistState')) || {};
+
+      data.tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        const checkboxId = `task-${index}`;
+
+        li.innerHTML = `
+          <label>
+            <input type="checkbox" id="${checkboxId}">
+            <strong>${task.time}</strong> - ${task.text}
+          </label>
+        `;
+        list.appendChild(li);
+
+        // Restore checkbox state
+        const checkbox = document.getElementById(checkboxId);
+        checkbox.checked = savedState[checkboxId] || false;
+
+        checkbox.addEventListener('change', () => {
+          savedState[checkboxId] = checkbox.checked;
+          localStorage.setItem('checklistState', JSON.stringify(savedState));
+        });
       });
+
+      // Now render recipes
+      const recipesDiv = document.getElementById('recipes');
+      recipesDiv.innerHTML = ''; // Clear previous content
+      
+      data.recipes.forEach((recipe, index) => {
+        const section = document.createElement('section');
+        
+        const recipeId = `recipe-${index}`;
+
+        section.innerHTML = `
+          <h3 style="cursor: pointer;" data-toggle="${recipeId}">${recipe.name} &#x25BC;</h3>
+          <div id="${recipeId}" style="display: none; margin-bottom: 1rem;">
+            <h4>Ingredients</h4>
+            <ul>${recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}</ul>
+            <h4>Instructions</h4>
+            <ol>${recipe.instructions.map(step => `<li>${step}</li>`).join('')}</ol>
+          </div>
+        `;
+        
+        recipesDiv.appendChild(section);
+      });
+
+      // Add toggle behavior for recipe headings
+      document.querySelectorAll('h3[data-toggle]').forEach(header => {
+        header.addEventListener('click', () => {
+          const targetId = header.getAttribute('data-toggle');
+          const contentDiv = document.getElementById(targetId);
+
+          if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+            header.innerHTML = header.innerHTML.replace('&#x25BC;', '&#x25B2;'); // Down arrow ➔ Up arrow
+          } else {
+            contentDiv.style.display = 'none';
+            header.innerHTML = header.innerHTML.replace('&#x25B2;', '&#x25BC;'); // Up arrow ➔ Down arrow
+          }
+        });
+      });
+      
+      // Show the meal plan content and hide the upload section
+      document.getElementById('upload-section').classList.add('hidden');
+      document.getElementById('content-section').classList.remove('hidden');
+    }
+
+    // Function to handle file upload
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const data = JSON.parse(e.target.result);
+            processData(data);
+          } catch (error) {
+            alert('Error parsing JSON file: ' + error.message);
+            console.error(error);
+          }
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    // Load default data on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      // Add event listener for file input
+      document.getElementById('json-file').addEventListener('change', handleFileUpload);
+      
+      // Try to load default timeline.json
+      document.getElementById('load-default').addEventListener('click', () => {
+        fetch('timeline.json')
+          .then(response => response.json())
+          .then(data => {
+            processData(data);
+          })
+          .catch(error => {
+            alert('Error loading default timeline: ' + error.message);
+            console.error(error);
+          });
+      });
+    });
   </script>
 </head>
 <body>
-
-  <h1 id="title">Loading...</h1>
-  <ul id="checklist"></ul>
-  <h2>Recipes</h2>
-  <div id="recipes"></div>
+  <h1>Mealstorm</h1>
+  
+  <div id="upload-section" class="file-upload">
+    <h2>Upload Your Meal Plan</h2>
+    <p>Upload a JSON file with your meal plan data or use our default timeline.</p>
+    <input type="file" id="json-file" accept=".json">
+    <p>- or -</p>
+    <button id="load-default">Load Default Timeline</button>
+  </div>
+  
+  <div id="content-section" class="hidden">
+    <h2 id="title">Loading...</h2>
+    <ul id="checklist"></ul>
+    <h2>Recipes</h2>
+    <div id="recipes"></div>
+    <button onclick="document.getElementById('upload-section').classList.remove('hidden'); document.getElementById('content-section').classList.add('hidden');">
+      Upload Different File
+    </button>
+  </div>
 </body>
 </html>
