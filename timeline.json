@@ -1,0 +1,78 @@
+{
+    "title": "6pm Dinner Plan",
+    "tasks": [
+      { "time": "4:30pm", "text": "Preheat oven to 450°F" },
+      { "time": "4:45pm", "text": "Toss and roast potatoes" },
+      { "time": "5:00pm", "text": "Start Instant Pot risotto" },
+      { "time": "5:15pm", "text": "Add salmon to sheet pan" },
+      { "time": "5:20pm", "text": "Start sautéing broccolini" },
+      { "time": "5:25pm", "text": "Finish risotto, broil salmon" },
+      { "time": "5:45pm", "text": "Assemble and serve!" }
+    ],
+    "recipes": [
+      {
+        "name": "Instant Pot Garlic Parmesan Risotto",
+        "ingredients": [
+          "4 Tbsp butter",
+          "1 cup diced onion",
+          "1 Tbsp minced garlic",
+          "1 1/2 cups arborio rice",
+          "4 cups chicken broth",
+          "2 Tbsp white vinegar",
+          "1/2 tsp kosher salt",
+          "1/4 tsp pepper",
+          "1 tsp garlic powder",
+          "1 cup shredded parmesan cheese"
+        ],
+        "instructions": [
+          "Turn Instant Pot to sauté and melt butter.",
+          "Sauté onion (4 min), garlic (30 sec). Add rice and stir.",
+          "Add 1 cup broth, scrape, stir until absorbed.",
+          "Add remaining broth, vinegar, salt, pepper, garlic powder.",
+          "Pressure cook 10 min. Natural release 10 min.",
+          "Stir in parmesan. Serve!"
+        ]
+      },
+      {
+        "name": "Sheet Pan Salmon with Dill Potatoes",
+        "ingredients": [
+          "24 oz baby Yukon gold potatoes",
+          "1.5 Tbsp olive oil",
+          "1.5 tsp kosher salt",
+          "1/2 cup water",
+          "3 Tbsp butter, melted",
+          "1 clove garlic, grated",
+          "1 Tbsp freeze-dried dill (or 3 Tbsp fresh)",
+          "1.5 lbs salmon filet",
+          "3 Tbsp Dijon mustard",
+          "2 Tbsp mayo",
+          "Red pepper flakes, lemon wedges"
+        ],
+        "instructions": [
+          "Preheat oven to 450°F. Toss potatoes with oil and salt.",
+          "Roast potatoes for 30 min, stirring occasionally.",
+          "Move potatoes aside, place salmon in center, top with Dijon/mayo.",
+          "Bake salmon 6 min, broil 2-3 min.",
+          "Toss potatoes with garlic butter and dill. Serve with salmon."
+        ]
+      },
+      {
+        "name": "Sautéed Broccolini",
+        "ingredients": [
+          "2 Tbsp extra virgin olive oil",
+          "3 garlic cloves, thinly sliced",
+          "1/4 tsp red pepper flakes",
+          "1 bunch broccolini, trimmed",
+          "1/4 tsp sea salt",
+          "2 Tbsp water",
+          "2 tsp fresh lemon juice"
+        ],
+        "instructions": [
+          "Heat oil in large skillet, cook garlic and pepper flakes 30 sec.",
+          "Add broccolini and salt, toss and cook 2 min.",
+          "Add water, cover, cook 3-5 min until tender.",
+          "Toss with lemon juice. Serve."
+        ]
+      }
+    ]
+  }
