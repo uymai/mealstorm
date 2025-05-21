@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mealstorm</title>
+  <script src="https://unpkg.com/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -137,11 +138,186 @@
       border-radius: 5px;
       text-align: center;
     }
+    .json-paste-area {
+      width: 100%;
+      min-height: 200px;
+      margin: 10px 0;
+      padding: 10px;
+      font-family: monospace;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+    }
+    .or-divider {
+      margin: 20px 0;
+      text-align: center;
+      position: relative;
+    }
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 45%;
+      height: 1px;
+      background: #ccc;
+    }
+    .or-divider::before {
+      left: 0;
+    }
+    .or-divider::after {
+      right: 0;
+    }
+    .toggle-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: #607d8b;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    .toggle-button.active {
+      background: #2196F3;
+    }
+    .toggle-button svg {
+      width: 20px;
+      height: 20px;
+    }
+    .time-shift-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 4px;
+    }
+    .time-input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      width: 120px;
+    }
   </style>
   <script>
+    // Initialize NoSleep instance
+    const noSleep = new NoSleep();
+    let isNoSleepEnabled = false;
+    let originalTasks = null; // Store original task times
+
+    // Function to convert 12-hour time to 24-hour time
+    function to24Hour(timeStr) {
+      const [_, hours, minutes, period] = timeStr.toLowerCase().match(/(\d+):(\d+)([ap]m)/);
+      let hour = parseInt(hours);
+      if (period === 'pm' && hour !== 12) hour += 12;
+      if (period === 'am' && hour === 12) hour = 0;
+      return `${hour.toString().padStart(2, '0')}:${minutes}`;
+    }
+
+    // Function to convert 24-hour time to 12-hour time
+    function to12Hour(timeStr) {
+      const [hours, minutes] = timeStr.split(':');
+      let hour = parseInt(hours);
+      const period = hour >= 12 ? 'pm' : 'am';
+      if (hour > 12) hour -= 12;
+      if (hour === 0) hour = 12;
+      return `${hour}:${minutes}${period}`;
+    }
+
+    // Function to parse time string to minutes since midnight
+    function timeToMinutes(timeStr) {
+      const [hours, minutes] = timeStr.split(':');
+      return parseInt(hours) * 60 + parseInt(minutes);
+    }
+
+    // Function to convert minutes since midnight to 24-hour time string
+    function minutesToTime(minutes) {
+      const hours = Math.floor(minutes / 60);
+      const mins = minutes % 60;
+      return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+    }
+
+    // Function to shift all times
+    function shiftTimes() {
+      if (!originalTasks) return;
+      
+      const targetTime = document.getElementById('target-time').value;
+      if (!targetTime) return;
+
+      try {
+        // Find the last task in original timeline
+        const lastTaskTime = originalTasks[originalTasks.length - 1].time;
+        const originalEndMinutes = timeToMinutes(to24Hour(lastTaskTime));
+        const targetEndMinutes = timeToMinutes(targetTime);
+        const minutesDiff = targetEndMinutes - originalEndMinutes;
+
+        // Update all task times
+        const list = document.getElementById('checklist');
+        list.innerHTML = '';
+        
+        originalTasks.forEach((task, index) => {
+          const originalMinutes = timeToMinutes(to24Hour(task.time));
+          const newTime = to12Hour(minutesToTime(originalMinutes + minutesDiff));
+          
+          const li = document.createElement('li');
+          const checkboxId = `task-${index}`;
+          
+          li.innerHTML = `
+            <label>
+              <input type="checkbox" id="${checkboxId}">
+              <strong>${newTime}</strong> - ${task.text}
+            </label>
+          `;
+          list.appendChild(li);
+          
+          // Restore checkbox state if exists
+          const savedState = JSON.parse(localStorage.getItem('checklistState')) || {};
+          const checkbox = document.getElementById(checkboxId);
+          checkbox.checked = savedState[checkboxId] || false;
+          
+          checkbox.addEventListener('change', () => {
+            savedState[checkboxId] = checkbox.checked;
+            localStorage.setItem('checklistState', JSON.stringify(savedState));
+          });
+        });
+      } catch (error) {
+        alert('Invalid time format');
+        console.error(error);
+      }
+    }
+
+    // Function to toggle NoSleep
+    function toggleNoSleep() {
+      const button = document.getElementById('noSleepButton');
+      if (!isNoSleepEnabled) {
+        noSleep.enable().then(() => {
+          isNoSleepEnabled = true;
+          button.classList.add('active');
+          button.querySelector('.button-text').textContent = 'Disable Screen Lock';
+        });
+      } else {
+        noSleep.disable();
+        isNoSleepEnabled = false;
+        button.classList.remove('active');
+        button.querySelector('.button-text').textContent = 'Keep Screen On';
+      }
+    }
+
     // Function to process the JSON data
     function processData(data, savePlan = true) {
       document.getElementById('title').textContent = data.title;
+      originalTasks = [...data.tasks]; // Store original tasks
+      
+      // Set the target time input to the last task's time
+      const lastTask = data.tasks[data.tasks.length - 1];
+      const timeInput = document.getElementById('target-time');
+      timeInput.value = to24Hour(lastTask.time);
+      
       const list = document.getElementById('checklist');
       list.innerHTML = ''; // Clear previous content
       
@@ -319,6 +495,23 @@
       }
     }
 
+    // Function to handle pasted JSON
+    function handlePastedJSON() {
+      const jsonText = document.getElementById('json-paste').value.trim();
+      if (!jsonText) {
+        alert('Please paste some JSON content first.');
+        return;
+      }
+      
+      try {
+        const data = JSON.parse(jsonText);
+        processData(data);
+      } catch (error) {
+        alert('Error parsing JSON: ' + error.message);
+        console.error(error);
+      }
+    }
+
     // Load default data on page load
     window.addEventListener('DOMContentLoaded', () => {
       // Update saved plans list
@@ -429,6 +622,20 @@
       </a>
       <p style="font-size: 0.9em; margin-top: 8px;">Our AI assistant will help convert your recipes into the correct JSON format</p>
     </div>
+
+    <div class="or-divider">
+      <span>Paste JSON</span>
+    </div>
+    
+    <div>
+      <textarea id="json-paste" class="json-paste-area" placeholder="Paste your JSON here..."></textarea>
+      <button onclick="handlePastedJSON()" class="secondary-button">Load Pasted JSON</button>
+    </div>
+
+    <div class="or-divider">
+      <span>Upload File</span>
+    </div>
+
     <input type="file" id="json-file" accept=".json">
     <div style="margin: 15px 0;">
       <button id="helpButton" class="help-button">Help with JSON Format</button>
@@ -505,6 +712,19 @@
   
   <div id="content-section" class="hidden">
     <h2 id="title">Loading...</h2>
+    <button id="noSleepButton" class="toggle-button" onclick="toggleNoSleep()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
+      </svg>
+      <span class="button-text">Keep Screen On</span>
+    </button>
+    
+    <div class="time-shift-container">
+      <label for="target-time">Target Dinner Time:</label>
+      <input type="time" id="target-time" class="time-input">
+      <button onclick="shiftTimes()" class="secondary-button">Adjust Timeline</button>
+    </div>
+
     <ul id="checklist"></ul>
     <h2>Recipes</h2>
     <div id="recipes"></div>
