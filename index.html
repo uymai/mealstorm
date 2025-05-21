@@ -114,6 +114,29 @@
       display: flex;
       gap: 5px;
     }
+    .helper-link {
+      color: #2196F3;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .helper-link:hover {
+      text-decoration: underline;
+      color: #0b7dda;
+    }
+    .helper-link img {
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
+    }
+    .helper-section {
+      margin: 15px 0;
+      padding: 15px;
+      background: #e3f2fd;
+      border-radius: 5px;
+      text-align: center;
+    }
   </style>
   <script>
     // Function to process the JSON data
@@ -395,6 +418,17 @@
   <div id="upload-section" class="file-upload">
     <h2>Upload Your Meal Plan</h2>
     <p>Upload a JSON file with your meal plan data or use our default timeline.</p>
+    <div class="helper-section">
+      <p>Need help creating your meal plan JSON?</p>
+      <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank" class="helper-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 11C20 15.4183 16.4183 19 12 19C7.58172 19 4 15.4183 4 11C4 6.58172 7.58172 3 12 3C16.4183 3 20 6.58172 20 11Z" stroke="#2196F3" stroke-width="2"/>
+          <path d="M12 7V11L15 14" stroke="#2196F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Use Mealstorm Buddy (AI Assistant)
+      </a>
+      <p style="font-size: 0.9em; margin-top: 8px;">Our AI assistant will help convert your recipes into the correct JSON format</p>
+    </div>
     <input type="file" id="json-file" accept=".json">
     <div style="margin: 15px 0;">
       <button id="helpButton" class="help-button">Help with JSON Format</button>
@@ -415,7 +449,20 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>How to Format Your JSON File</h2>
-      <p>Your JSON file should follow this structure:</p>
+      
+      <div class="helper-section">
+        <p><strong>Quick Start:</strong> Use our AI assistant to create your JSON file automatically!</p>
+        <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank" class="helper-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 11C20 15.4183 16.4183 19 12 19C7.58172 19 4 15.4183 4 11C4 6.58172 7.58172 3 12 3C16.4183 3 20 6.58172 20 11Z" stroke="#2196F3" stroke-width="2"/>
+            <path d="M12 7V11L15 14" stroke="#2196F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Launch Mealstorm Buddy
+        </a>
+        <p style="font-size: 0.9em; margin-top: 8px;">Just paste your recipes and timeline, and the AI will format them correctly</p>
+      </div>
+
+      <p>If you prefer to create the JSON manually, follow this structure:</p>
       <pre><code>{
   "title": "Your Meal Plan Title",
   "tasks": [
