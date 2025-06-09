@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mealstorm</title>
-  <script src="https://unpkg.com/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -115,283 +115,586 @@
       display: flex;
       gap: 5px;
     }
-    .helper-link {
-      color: #2196F3;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+    .recipe-container {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
     }
-    .helper-link:hover {
-      text-decoration: underline;
-      color: #0b7dda;
+    .recipe-tabs {
+      flex: 0 0 200px;
+      border-right: 1px solid #ddd;
+      padding-right: 20px;
     }
-    .helper-link img {
-      width: 20px;
-      height: 20px;
-      vertical-align: middle;
-    }
-    .helper-section {
-      margin: 15px 0;
-      padding: 15px;
-      background: #e3f2fd;
-      border-radius: 5px;
-      text-align: center;
-    }
-    .json-paste-area {
-      width: 100%;
-      min-height: 200px;
-      margin: 10px 0;
-      padding: 10px;
-      font-family: monospace;
-      border: 1px solid #ccc;
+    .recipe-tab {
+      padding: 10px 15px;
+      margin: 5px 0;
+      cursor: pointer;
       border-radius: 4px;
-      resize: vertical;
+      transition: background-color 0.2s;
     }
-    .or-divider {
-      margin: 20px 0;
-      text-align: center;
+    .recipe-tab:hover {
+      background-color: #f0f0f0;
+    }
+    .recipe-tab.active {
+      background-color: #e3f2fd;
+      color: #2196F3;
+      font-weight: bold;
+    }
+    .recipe-content {
+      flex: 1;
+    }
+    .recipe-section {
+      display: none;
+    }
+    .recipe-section.active {
+      display: block;
+    }
+    .steps-section {
+      margin-bottom: 20px;
+    }
+    .recipe-title {
+      margin-top: 0;
+      color: #2196F3;
+    }
+    /* Add modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
       position: relative;
     }
-    .or-divider::before,
-    .or-divider::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 45%;
-      height: 1px;
-      background: #ccc;
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
     }
-    .or-divider::before {
-      left: 0;
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
     }
-    .or-divider::after {
-      right: 0;
+    .help-content {
+      margin-top: 20px;
     }
-    .toggle-button {
-      display: inline-flex;
+    .help-content pre {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    .help-content ul {
+      list-style-type: disc;
+      margin-left: 20px;
+    }
+    .help-content li {
+      margin: 8px 0;
+    }
+    .checklist-item {
+      display: flex;
       align-items: center;
-      gap: 8px;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .checklist-item input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    .checklist-item label {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      cursor: pointer;
+    }
+    .checklist-item .time {
+      font-weight: bold;
+      margin-right: 10px;
+      min-width: 80px;
+    }
+    .checklist-item .task {
+      flex: 1;
+    }
+    .checklist-item input[type="checkbox"]:checked + label {
+      text-decoration: line-through;
+      color: #888;
+    }
+    /* Add styles for the upload container */
+    .upload-container {
+      margin: 20px 0;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+
+    .upload-options {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .file-upload {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .json-input {
+      flex: 2;
+      min-width: 300px;
+    }
+
+    .json-input textarea {
+      width: 100%;
+      height: 150px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      resize: vertical;
+    }
+
+    .upload-btn {
+      display: inline-block;
       padding: 8px 16px;
-      background: #607d8b;
+      background: #2196F3;
+
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      margin: 5px;
+
+      font-size: 14px;
     }
-    .toggle-button.active {
-      background: #2196F3;
+
+    .upload-btn:hover {
+      background: #1976D2;
     }
-    .toggle-button svg {
-      width: 20px;
-      height: 20px;
+
+    input[type="file"] {
+      display: none;
     }
-    .time-shift-container {
+
+    /* Add new tab styles */
+    .main-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ddd;
+    }
+    
+    .main-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 16px;
+      color: #666;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    
+    .main-tab.active {
+      color: #2196F3;
+      border-bottom: 2px solid #2196F3;
+      font-weight: bold;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Plan tab specific styles */
+    .plan-section {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .plan-section h2 {
+      color: #2196F3;
+      margin-top: 0;
+    }
+    
+    .json-format {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 15px 0;
+    }
+
+    /* Add new styles for About tab */
+    .about-section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .about-section-content {
+      margin-bottom: 40px;
+    }
+
+    .about-section h1 {
+      color: #2196F3;
+      margin-bottom: 30px;
+    }
+
+    .about-section h2 {
+      color: #2196F3;
+      margin-bottom: 15px;
+    }
+
+    .about-section p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .about-section ol, .about-section ul {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    .about-section li {
+      margin-bottom: 8px;
+    }
+
+    .about-section a {
+      color: #2196F3;
+      text-decoration: none;
+    }
+
+    .about-section a:hover {
+      text-decoration: underline;
+    }
+
+    /* Add styles for cook header */
+    .cook-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .no-sleep-btn {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin: 15px 0;
-      padding: 10px;
-      background: #f5f5f5;
+      gap: 5px;
+      padding: 8px 16px;
+      background: #2196F3;
+      color: white;
+      border: none;
       border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
     }
-    .time-input {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+
+    .no-sleep-btn:hover {
+      background: #1976D2;
+    }
+
+    .no-sleep-btn .icon {
       font-size: 16px;
-      width: 120px;
+    }
+
+    .no-sleep-btn.active {
+      background: #4CAF50;
+    }
+
+    .no-sleep-btn.active:hover {
+      background: #45a049;
     }
   </style>
   <script>
-    // Initialize NoSleep instance
-    const noSleep = new NoSleep();
+    // Initialize NoSleep instance with error handling
+    let noSleep;
+    try {
+      noSleep = new NoSleep();
+    } catch (error) {
+      console.warn('NoSleep.js not available:', error);
+      // Create a dummy NoSleep object for unsupported browsers
+      noSleep = {
+        enable: () => Promise.resolve(),
+        disable: () => {}
+      };
+    }
     let isNoSleepEnabled = false;
     let originalTasks = null; // Store original task times
 
-    // Function to convert 12-hour time to 24-hour time
+    // Time conversion functions
     function to24Hour(timeStr) {
-      const [_, hours, minutes, period] = timeStr.toLowerCase().match(/(\d+):(\d+)([ap]m)/);
-      let hour = parseInt(hours);
-      if (period === 'pm' && hour !== 12) hour += 12;
-      if (period === 'am' && hour === 12) hour = 0;
-      return `${hour.toString().padStart(2, '0')}:${minutes}`;
+      if (!timeStr) return '';
+      
+      // Handle already 24-hour format (HH:mm)
+      if (timeStr.match(/^\d{1,2}:\d{2}$/)) {
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+          return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        }
+      }
+      
+      // Handle 12-hour format (e.g., "4:00 PM", "4 PM", "4:00pm")
+      const match = timeStr.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)/i);
+      if (match) {
+        let [_, hours, minutes, period] = match;
+        hours = parseInt(hours);
+        minutes = minutes ? parseInt(minutes) : 0;
+        
+        if (hours < 1 || hours > 12 || minutes < 0 || minutes > 59) {
+          return '';
+        }
+        
+        if (period.toLowerCase() === 'pm' && hours !== 12) {
+          hours += 12;
+        } else if (period.toLowerCase() === 'am' && hours === 12) {
+          hours = 0;
+        }
+        
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      }
+
+      
+      return '';
     }
 
-    // Function to convert 24-hour time to 12-hour time
     function to12Hour(timeStr) {
-      const [hours, minutes] = timeStr.split(':');
-      let hour = parseInt(hours);
-      const period = hour >= 12 ? 'pm' : 'am';
-      if (hour > 12) hour -= 12;
-      if (hour === 0) hour = 12;
-      return `${hour}:${minutes}${period}`;
+      if (!timeStr) return '';
+      
+      // Handle 12-hour format
+      if (timeStr.match(/\d{1,2}:\d{2}\s*(am|pm)/i)) {
+        return timeStr;
+      }
+      
+      // Handle 24-hour format
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        return '';
+      }
+      
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const displayHours = hours % 12 || 12;
+      return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
     }
 
-    // Function to parse time string to minutes since midnight
     function timeToMinutes(timeStr) {
-      const [hours, minutes] = timeStr.split(':');
-      return parseInt(hours) * 60 + parseInt(minutes);
+      if (!timeStr) return 0;
+      
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        return 0;
+      }
+      
+      return hours * 60 + minutes;
     }
 
-    // Function to convert minutes since midnight to 24-hour time string
     function minutesToTime(minutes) {
+      if (typeof minutes !== 'number' || isNaN(minutes) || minutes < 0 || minutes >= 24 * 60) {
+        return '';
+      }
+      
       const hours = Math.floor(minutes / 60);
       const mins = minutes % 60;
       return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
     }
 
-    // Function to shift all times
-    function shiftTimes() {
-      if (!originalTasks) return;
-      
-      const targetTime = document.getElementById('target-time').value;
-      if (!targetTime) return;
+    // Function to toggle NoSleep
+    function toggleNoSleep() {
+      const noSleepBtn = document.getElementById('noSleepBtn');
+      if (!noSleepBtn) return;
 
-      try {
-        // Find the last task in original timeline
-        const lastTaskTime = originalTasks[originalTasks.length - 1].time;
-        const originalEndMinutes = timeToMinutes(to24Hour(lastTaskTime));
-        const targetEndMinutes = timeToMinutes(targetTime);
-        const minutesDiff = targetEndMinutes - originalEndMinutes;
-
-        // Update all task times
-        const list = document.getElementById('checklist');
-        list.innerHTML = '';
-        
-        originalTasks.forEach((task, index) => {
-          const originalMinutes = timeToMinutes(to24Hour(task.time));
-          const newTime = to12Hour(minutesToTime(originalMinutes + minutesDiff));
-          
-          const li = document.createElement('li');
-          const checkboxId = `task-${index}`;
-          
-          li.innerHTML = `
-            <label>
-              <input type="checkbox" id="${checkboxId}">
-              <strong>${newTime}</strong> - ${task.text}
-            </label>
-          `;
-          list.appendChild(li);
-          
-          // Restore checkbox state if exists
-          const savedState = JSON.parse(localStorage.getItem('checklistState')) || {};
-          const checkbox = document.getElementById(checkboxId);
-          checkbox.checked = savedState[checkboxId] || false;
-          
-          checkbox.addEventListener('change', () => {
-            savedState[checkboxId] = checkbox.checked;
-            localStorage.setItem('checklistState', JSON.stringify(savedState));
-          });
-        });
-      } catch (error) {
-        alert('Invalid time format');
-        console.error(error);
+      if (!noSleep) {
+        noSleep = new NoSleep();
+        noSleep.enable();
+        noSleepBtn.classList.add('active');
+        noSleepBtn.innerHTML = '<span class="icon">🔓</span> Screen On';
+      } else {
+        noSleep.disable();
+        noSleep = null;
+        noSleepBtn.classList.remove('active');
+        noSleepBtn.innerHTML = '<span class="icon">🔒</span> Keep Screen On';
       }
     }
 
-    // Function to toggle NoSleep
-    function toggleNoSleep() {
-      const button = document.getElementById('noSleepButton');
-      if (!isNoSleepEnabled) {
-        noSleep.enable().then(() => {
-          isNoSleepEnabled = true;
-          button.classList.add('active');
-          button.querySelector('.button-text').textContent = 'Disable Screen Lock';
-        });
-      } else {
-        noSleep.disable();
-        isNoSleepEnabled = false;
-        button.classList.remove('active');
-        button.querySelector('.button-text').textContent = 'Keep Screen On';
+    // Function to show recipe section
+    function showRecipeSection(sectionId) {
+      // Hide all sections
+      const sections = document.querySelectorAll('.recipe-section');
+      sections.forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Show selected section
+      const selectedSection = document.getElementById(sectionId);
+      if (selectedSection) {
+        selectedSection.classList.add('active');
       }
+      
+      // Update tab states
+      const tabs = document.querySelectorAll('.recipe-tab');
+      tabs.forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-section') === sectionId) {
+          tab.classList.add('active');
+        }
+      });
     }
 
     // Function to process the JSON data
     function processData(data, savePlan = true) {
-      document.getElementById('title').textContent = data.title;
+      if (!data || !data.tasks) {
+        console.error('Invalid data format');
+        return;
+      }
+
+      // Update title
+      const titleElement = document.getElementById('title');
+      if (titleElement) {
+        titleElement.textContent = data.title || 'Mealstorm';
+      }
+      
       originalTasks = [...data.tasks]; // Store original tasks
       
       // Set the target time input to the last task's time
-      const lastTask = data.tasks[data.tasks.length - 1];
       const timeInput = document.getElementById('target-time');
-      timeInput.value = to24Hour(lastTask.time);
-      
-      const list = document.getElementById('checklist');
-      list.innerHTML = ''; // Clear previous content
-      
-      // Load saved checked states
-      const savedState = JSON.parse(localStorage.getItem('checklistState')) || {};
-
-      data.tasks.forEach((task, index) => {
-        const li = document.createElement('li');
-        const checkboxId = `task-${index}`;
-
-        li.innerHTML = `
-          <label>
-            <input type="checkbox" id="${checkboxId}">
-            <strong>${task.time}</strong> - ${task.text}
-          </label>
-        `;
-        list.appendChild(li);
-
-        // Restore checkbox state
-        const checkbox = document.getElementById(checkboxId);
-        checkbox.checked = savedState[checkboxId] || false;
-
-        checkbox.addEventListener('change', () => {
-          savedState[checkboxId] = checkbox.checked;
-          localStorage.setItem('checklistState', JSON.stringify(savedState));
-        });
-      });
-
-      // Now render recipes
-      const recipesDiv = document.getElementById('recipes');
-      recipesDiv.innerHTML = ''; // Clear previous content
-      
-      data.recipes.forEach((recipe, index) => {
-        const section = document.createElement('section');
-        
-        const recipeId = `recipe-${index}`;
-
-        section.innerHTML = `
-          <h3 style="cursor: pointer;" data-toggle="${recipeId}">${recipe.name} &#x25BC;</h3>
-          <div id="${recipeId}" style="display: none; margin-bottom: 1rem;">
-            <h4>Ingredients</h4>
-            <ul>${recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}</ul>
-            <h4>Instructions</h4>
-            <ol>${recipe.instructions.map(step => `<li>${step}</li>`).join('')}</ol>
-          </div>
-        `;
-        
-        recipesDiv.appendChild(section);
-      });
-
-      // Add toggle behavior for recipe headings
-      document.querySelectorAll('h3[data-toggle]').forEach(header => {
-        header.addEventListener('click', () => {
-          const targetId = header.getAttribute('data-toggle');
-          const contentDiv = document.getElementById(targetId);
-
-          if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-            header.innerHTML = header.innerHTML.replace('&#x25BC;', '&#x25B2;'); // Down arrow ➔ Up arrow
-          } else {
-            contentDiv.style.display = 'none';
-            header.innerHTML = header.innerHTML.replace('&#x25B2;', '&#x25BC;'); // Up arrow ➔ Down arrow
+      if (timeInput && data.tasks.length > 0) {
+        const lastTask = data.tasks[data.tasks.length - 1];
+        if (lastTask && lastTask.time) {
+          const time24 = to24Hour(lastTask.time);
+          if (time24) {
+            timeInput.value = time24;
           }
-        });
-      });
-      
-      // Save the timeline data to localStorage if requested
-      if (savePlan) {
-        saveTimelineToStorage(data);
+        }
       }
       
-      // Show the meal plan content and hide the upload section
-      document.getElementById('upload-section').classList.add('hidden');
-      document.getElementById('content-section').classList.remove('hidden');
+      // Create tabs container
+      const tabsContainer = document.querySelector('.recipe-tabs');
+      tabsContainer.innerHTML = '<div class="recipe-tab active" data-section="steps-section" onclick="showRecipeSection(\'steps-section\')">Timeline Steps</div>';
+      
+      // Create content container
+      const contentContainer = document.querySelector('.recipe-content');
+      contentContainer.innerHTML = `
+        <div id="steps-section" class="recipe-section active">
+          <div class="time-shift-container">
+            <label for="target-time">Target Time:</label>
+            <input type="time" id="target-time" step="60">
+            <button onclick="shiftTimes()">Adjust Timeline</button>
+          </div>
+          <div id="checklist"></div>
+        </div>
+      `;
+      
+      // Get the checklist element after creating the content
+      const list = document.getElementById('checklist');
+      if (!list) {
+        console.error('Checklist element not found');
+        return;
+      }
+      
+      list.innerHTML = ''; // Clear previous content
+      
+      // Process tasks and create recipe tabs
+      data.tasks.forEach((task, index) => {
+        // Add task to checklist
+        const item = document.createElement('div');
+        item.className = 'checklist-item';
+        item.innerHTML = `
+          <input type="checkbox" id="task${index}" onchange="updateTaskStatus(${index})">
+          <label for="task${index}">
+            <span class="time">${task.time}</span>
+            <span class="task">${task.text || task.task}</span>
+          </label>
+        `;
+        list.appendChild(item);
+      });
+
+      // Add recipe tabs and sections
+      if (data.recipes) {
+        data.recipes.forEach((recipe, index) => {
+          const tabId = `recipe-${index}`;
+          
+          // Add recipe tab
+          const tab = document.createElement('div');
+          tab.className = 'recipe-tab';
+          tab.textContent = recipe.name;
+          tab.setAttribute('data-section', tabId);
+          tab.onclick = () => showRecipeSection(tabId);
+          tabsContainer.appendChild(tab);
+          
+          // Add recipe section
+          const section = document.createElement('div');
+          section.id = tabId;
+          section.className = 'recipe-section';
+          section.innerHTML = `
+            <h3>${recipe.name}</h3>
+            <div class="recipe-ingredients">
+              <h4>Ingredients:</h4>
+              <ul>
+                ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+              </ul>
+            </div>
+            <div class="recipe-steps">
+              <h4>Steps:</h4>
+              <ol>
+                ${recipe.instructions.map(step => `<li>${step}</li>`).join('')}
+              </ol>
+            </div>
+          `;
+          contentContainer.appendChild(section);
+        });
+      }
+      
+      // Save to localStorage if requested
+      if (savePlan) {
+        localStorage.setItem('currentMealPlan', JSON.stringify(data));
+        // Also save to saved timelines
+        saveTimelineToStorage(data);
+        // Update the saved plans list
+        updateSavedPlansList();
+      }
+    }
+
+    // Function to shift times based on new target time
+    function shiftTimes() {
+      const timeInput = document.getElementById('target-time');
+      if (!timeInput || !timeInput.value || !originalTasks) return;
+      
+      const newTargetTime = timeInput.value;
+      const newTargetMinutes = timeToMinutes(newTargetTime);
+      const originalTargetTime = originalTasks[originalTasks.length - 1].time;
+      const originalTargetMinutes = timeToMinutes(to24Hour(originalTargetTime));
+      const timeDiff = newTargetMinutes - originalTargetMinutes;
+      
+      // Update checklist times
+      const checklist = document.getElementById('checklist');
+      if (checklist) {
+        const items = checklist.getElementsByClassName('checklist-item');
+        originalTasks.forEach((task, index) => {
+          if (index < items.length) {
+            const timeSpan = items[index].querySelector('.time');
+            if (timeSpan) {
+              const newTime = minutesToTime(timeToMinutes(to24Hour(task.time)) + timeDiff);
+              timeSpan.textContent = to12Hour(newTime);
+            }
+          }
+        });
+      }
     }
 
     // Function to save timeline to localStorage
@@ -421,16 +724,15 @@
       const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
       const savedPlansContainer = document.getElementById('saved-plans-container');
       
+      if (!savedPlansContainer) return;
+      
       // Clear existing content
       savedPlansContainer.innerHTML = '';
       
       if (Object.keys(savedTimelines).length === 0) {
         savedPlansContainer.innerHTML = '<p>No saved meal plans yet.</p>';
-        document.getElementById('saved-plans-section').classList.add('hidden');
         return;
       }
-      
-      document.getElementById('saved-plans-section').classList.remove('hidden');
       
       // Sort by most recent first
       const sortedKeys = Object.keys(savedTimelines).sort((a, b) => 
@@ -442,43 +744,173 @@
         const plan = savedTimelines[key];
         const planElement = document.createElement('div');
         planElement.className = 'plan-item';
-        
         planElement.innerHTML = `
-          <span class="plan-title">${plan.title}</span>
+          <div class="plan-title">${plan.title}</div>
           <div class="plan-actions">
-            <button class="load-plan-btn" data-key="${key}">Load</button>
-            <button class="delete-plan-btn warning-button" data-key="${key}">Delete</button>
+            <button onclick="loadSavedPlan('${key}')">Load</button>
+            <button onclick="editSavedPlan('${key}')" class="secondary-button">Edit</button>
+            <button onclick="deleteSavedPlan('${key}')" class="warning-button">Delete</button>
           </div>
         `;
-        
         savedPlansContainer.appendChild(planElement);
-      });
-      
-      // Add event listeners to the buttons
-      document.querySelectorAll('.load-plan-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const key = e.target.getAttribute('data-key');
-          const plan = savedTimelines[key];
-          processData(plan.data, false);
-        });
-      });
-      
-      document.querySelectorAll('.delete-plan-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const key = e.target.getAttribute('data-key');
-          
-          // Confirm before deleting
-          if (confirm(`Are you sure you want to delete "${savedTimelines[key].title}"?`)) {
-            delete savedTimelines[key];
-            localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
-            updateSavedPlansList();
-          }
-        });
       });
     }
 
-    // Function to handle file upload
-    function handleFileUpload(event) {
+    // Function to load a saved plan
+    function loadSavedPlan(key) {
+      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+      const plan = savedTimelines[key];
+      if (plan && plan.data) {
+        processData(plan.data);
+        switchTab('cook');
+      }
+    }
+
+    // Function to edit a saved plan
+    function editSavedPlan(key) {
+      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+      const plan = savedTimelines[key];
+      if (plan && plan.data) {
+        // Switch to plan tab
+        switchTab('plan');
+        // Load the JSON into the textarea
+        const jsonInput = document.getElementById('jsonInput');
+        if (jsonInput) {
+          jsonInput.value = JSON.stringify(plan.data, null, 2);
+          // Scroll the textarea into view
+          jsonInput.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
+
+    // Function to delete a saved plan
+    function deleteSavedPlan(key) {
+      if (confirm('Are you sure you want to delete this saved plan?')) {
+        const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+        delete savedTimelines[key];
+        localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
+        updateSavedPlansList();
+      }
+    }
+
+    // Function to show help modal
+    function showHelp() {
+      const modal = document.getElementById('helpModal');
+      if (modal) {
+        modal.style.display = 'block';
+      }
+    }
+
+    // Function to initialize event listeners
+    function initializeEventListeners() {
+      // Help button
+      const helpBtn = document.getElementById('helpBtn');
+      if (helpBtn) {
+        helpBtn.addEventListener('click', showHelp);
+      }
+
+      // Close modal when clicking the X
+      const closeBtn = document.querySelector('.close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          const modal = document.getElementById('helpModal');
+          if (modal) {
+            modal.style.display = 'none';
+          }
+        });
+      }
+
+      // Close modal when clicking outside
+      window.addEventListener('click', (event) => {
+        const modal = document.getElementById('helpModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+
+      // Load default button
+      const loadDefaultBtn = document.getElementById('load-default');
+      if (loadDefaultBtn) {
+        loadDefaultBtn.addEventListener('click', () => {
+          const defaultData = {
+            title: "Default Dinner Plan",
+            tasks: [
+              {
+                time: "4:00 PM",
+                task: "Start preheating oven to 350°F",
+                recipe: {
+                  name: "Roast Chicken",
+                  ingredients: [
+                    "1 whole chicken (4-5 lbs)",
+                    "2 Tbsp olive oil",
+                    "2 tsp kosher salt",
+                    "1 tsp black pepper",
+                    "3 cloves garlic, crushed",
+                    "1 lemon, quartered"
+                  ],
+                  steps: [
+                    "Preheat oven to 350°F",
+                    "Rub chicken with olive oil, salt, and pepper",
+                    "Place garlic and lemon inside cavity",
+                    "Roast for 1 hour 15 minutes, until internal temperature reaches 165°F",
+                    "Let rest for 15 minutes before carving"
+                  ]
+                }
+              },
+              {
+                time: "4:15 PM",
+                task: "Prepare vegetables",
+                recipe: {
+                  name: "Roasted Vegetables",
+                  ingredients: [
+                    "2 lbs mixed vegetables (potatoes, carrots, onions)",
+                    "2 Tbsp olive oil",
+                    "1 tsp salt",
+                    "1/2 tsp black pepper",
+                    "2 sprigs fresh rosemary"
+                  ],
+                  steps: [
+                    "Cut vegetables into similar-sized pieces",
+                    "Toss with olive oil, salt, and pepper",
+                    "Add rosemary sprigs",
+                    "Roast for 45 minutes, stirring occasionally"
+                  ]
+                }
+              },
+              {
+                time: "5:30 PM",
+                task: "Check chicken temperature and let rest"
+              },
+              {
+                time: "5:45 PM",
+                task: "Carve chicken and serve with vegetables"
+              }
+            ]
+          };
+          processData(defaultData);
+        });
+      }
+
+      // Clear data button
+      const clearDataBtn = document.getElementById('clear-all-data');
+      if (clearDataBtn) {
+        clearDataBtn.addEventListener('click', () => {
+          if (confirm('Are you sure you want to clear all saved data?')) {
+            localStorage.clear();
+            location.reload();
+          }
+        });
+      }
+
+      // File input
+      const fileInput = document.getElementById('fileInput');
+      if (fileInput) {
+        fileInput.addEventListener('change', handleFileSelect);
+      }
+    }
+
+    // Function to handle file selection
+    function handleFileSelect(event) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
@@ -487,250 +919,173 @@
             const data = JSON.parse(e.target.result);
             processData(data);
           } catch (error) {
-            alert('Error parsing JSON file: ' + error.message);
-            console.error(error);
+            alert('Error parsing JSON file. Please check the format.');
+            console.error('JSON parse error:', error);
           }
         };
         reader.readAsText(file);
       }
     }
 
-    // Function to handle pasted JSON
-    function handlePastedJSON() {
-      const jsonText = document.getElementById('json-paste').value.trim();
-      if (!jsonText) {
-        alert('Please paste some JSON content first.');
-        return;
-      }
+    // Function to handle JSON input
+    function handleJsonInput() {
+      const jsonInput = document.getElementById('jsonInput');
+      if (!jsonInput || !jsonInput.value) return;
+
       
       try {
-        const data = JSON.parse(jsonText);
+        const data = JSON.parse(jsonInput.value);
         processData(data);
+        // Clear the textarea after successful load
+        jsonInput.value = '';
       } catch (error) {
-        alert('Error parsing JSON: ' + error.message);
-        console.error(error);
+        alert('Error parsing JSON. Please check the format.');
+        console.error('JSON parse error:', error);
       }
     }
 
-    // Load default data on page load
-    window.addEventListener('DOMContentLoaded', () => {
-      // Update saved plans list
+    // Initialize event listeners when the DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeEventListeners();
       updateSavedPlansList();
       
-      // Add event listener for file input
-      document.getElementById('json-file').addEventListener('change', handleFileUpload);
-      
-      // Try to load default timeline.json
-      document.getElementById('load-default').addEventListener('click', () => {
-        fetch('timeline.json')
-          .then(response => response.json())
-          .then(data => {
-            processData(data);
-          })
-          .catch(error => {
-            alert('Error loading default timeline: ' + error.message);
-            console.error(error);
-          });
-      });
-      
-      // Clear all saved data
-      document.getElementById('clear-all-data').addEventListener('click', () => {
-        if (confirm('Are you sure you want to delete all saved meal plans? This cannot be undone.')) {
-          localStorage.removeItem('savedTimelines');
-          localStorage.removeItem('checklistState');
-          updateSavedPlansList();
-          alert('All saved data has been deleted.');
-        }
-      });
-
-      // Modal functionality
-      const modal = document.getElementById('helpModal');
-      const helpBtn = document.getElementById('helpButton');
-      const closeBtn = document.querySelector('.close');
-      
-      helpBtn.onclick = function() {
-        modal.style.display = 'block';
-      }
-      
-      closeBtn.onclick = function() {
-        modal.style.display = 'none';
-      }
-      
-      window.onclick = function(event) {
-        if (event.target == modal) {
-          modal.style.display = 'none';
+      // Load saved meal plan if it exists
+      const savedPlan = localStorage.getItem('currentMealPlan');
+      if (savedPlan) {
+        try {
+          const data = JSON.parse(savedPlan);
+          processData(data, false);
+        } catch (error) {
+          console.error('Error loading saved plan:', error);
         }
       }
-
-      // Download example JSON functionality
-      document.getElementById('downloadExample').addEventListener('click', () => {
-        const exampleJSON = {
-          "title": "Example Dinner Plan",
-          "tasks": [
-            { "time": "4:00pm", "text": "Preheat oven to 425°F" },
-            { "time": "4:15pm", "text": "Start preparing vegetables" },
-            { "time": "4:30pm", "text": "Season and prepare chicken" },
-            { "time": "4:45pm", "text": "Place chicken in oven" }
-          ],
-          "recipes": [
-            {
-              "name": "Roast Chicken",
-              "ingredients": [
-                "1 whole chicken (4-5 lbs)",
-                "2 Tbsp olive oil",
-                "2 tsp kosher salt",
-                "1 tsp black pepper",
-                "3 cloves garlic, crushed",
-                "1 lemon, quartered"
-              ],
-              "instructions": [
-                "Preheat oven to 425°F",
-                "Rub chicken with olive oil, salt, and pepper",
-                "Place garlic and lemon inside cavity",
-                "Roast for 1 hour 15 minutes, until internal temperature reaches 165°F",
-                "Let rest for 15 minutes before carving"
-              ]
-            }
-          ]
-        };
-        
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exampleJSON, null, 2));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "example_mealplan.json");
-        document.body.appendChild(downloadAnchorNode);
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-      });
     });
+
+    function switchTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Deactivate all tabs
+      document.querySelectorAll('.main-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected tab content
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+      
+      // Activate selected tab
+      document.querySelector(`.main-tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+    }
   </script>
 </head>
 <body>
-  <h1>Mealstorm</h1>
-  
-  <div id="upload-section" class="file-upload">
-    <h2>Upload Your Meal Plan</h2>
-    <p>Upload a JSON file with your meal plan data or use our default timeline.</p>
-    <div class="helper-section">
-      <p>Need help creating your meal plan JSON?</p>
-      <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank" class="helper-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 11C20 15.4183 16.4183 19 12 19C7.58172 19 4 15.4183 4 11C4 6.58172 7.58172 3 12 3C16.4183 3 20 6.58172 20 11Z" stroke="#2196F3" stroke-width="2"/>
-          <path d="M12 7V11L15 14" stroke="#2196F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Use Mealstorm Buddy (AI Assistant)
-      </a>
-      <p style="font-size: 0.9em; margin-top: 8px;">Our AI assistant will help convert your recipes into the correct JSON format</p>
-    </div>
 
-    <div class="or-divider">
-      <span>Paste JSON</span>
-    </div>
-    
-    <div>
-      <textarea id="json-paste" class="json-paste-area" placeholder="Paste your JSON here..."></textarea>
-      <button onclick="handlePastedJSON()" class="secondary-button">Load Pasted JSON</button>
-    </div>
-
-    <div class="or-divider">
-      <span>Upload File</span>
-    </div>
-
-    <input type="file" id="json-file" accept=".json">
-    <div style="margin: 15px 0;">
-      <button id="helpButton" class="help-button">Help with JSON Format</button>
-      <button id="downloadExample">Download Example JSON</button>
-    </div>
-    
-    <div id="saved-plans-section" class="saved-plans">
-      <h3>Your Saved Plans</h3>
-      <div id="saved-plans-container"></div>
-    </div>
-    
-    <p>- or -</p>
-    <button id="load-default">Load Default Timeline</button>
-    <button id="clear-all-data" class="warning-button">Clear All Saved Data</button>
+  <div class="main-tabs">
+    <button class="main-tab active" onclick="switchTab('about')">About</button>
+    <button class="main-tab" onclick="switchTab('plan')">Plan</button>
+    <button class="main-tab" onclick="switchTab('cook')">Cook</button>
   </div>
-  
-  <div id="helpModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>How to Format Your JSON File</h2>
+
+  <div id="about-tab" class="tab-content active">
+    <div class="about-section">
+      <h1>Welcome to Mealstorm!</h1>
       
-      <div class="helper-section">
-        <p><strong>Quick Start:</strong> Use our AI assistant to create your JSON file automatically!</p>
-        <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank" class="helper-link">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 11C20 15.4183 16.4183 19 12 19C7.58172 19 4 15.4183 4 11C4 6.58172 7.58172 3 12 3C16.4183 3 20 6.58172 20 11Z" stroke="#2196F3" stroke-width="2"/>
-            <path d="M12 7V11L15 14" stroke="#2196F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Launch Mealstorm Buddy
-        </a>
-        <p style="font-size: 0.9em; margin-top: 8px;">Just paste your recipes and timeline, and the AI will format them correctly</p>
+      <div class="about-section-content">
+        <h2>What is Mealstorm?</h2>
+        <p>Mealstorm is a cooking companion that helps you organize and execute multi-recipe meals. It breaks down complex cooking tasks into a clear timeline, making it easier to coordinate multiple dishes and serve everything at the perfect time.</p>
       </div>
 
-      <p>If you prefer to create the JSON manually, follow this structure:</p>
-      <pre><code>{
+      <div class="about-section-content">
+        <h2>Getting Started</h2>
+        <ol>
+          <li>Head to the <strong>Plan</strong> tab to create your meal plan</li>
+          <li>You can either:
+            <ul>
+              <li>Upload a JSON file with your meal plan</li>
+              <li>Paste your meal plan JSON directly</li>
+              <li>Use our <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank">Mealstorm Buddy</a> to generate a meal plan</li>
+            </ul>
+          </li>
+          <li>Switch to the <strong>Cook</strong> tab to see your interactive cooking timeline</li>
+        </ol>
+      </div>
+
+      <div class="about-section-content">
+        <h2>Need Help Creating a Plan?</h2>
+        <p>Try our <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank">Mealstorm Buddy</a> - a custom ChatGPT assistant that helps you create meal plans in the correct format!</p>
+      </div>
+
+      <div class="about-section-content">
+        <h2>JSON Format Guide</h2>
+        <p>Your meal plan should follow this structure:</p>
+        <div class="json-format">
+          <pre><code>{
+
   "title": "Your Meal Plan Title",
   "tasks": [
     { "time": "4:30pm", "text": "Preheat oven to 450°F" },
-    { "time": "4:45pm", "text": "Prepare the ingredients" },
-    { "time": "5:15pm", "text": "Start cooking" }
+    { "time": "4:45pm", "text": "Toss and roast potatoes" }
   ],
   "recipes": [
     {
       "name": "Recipe Name",
       "ingredients": [
-        "Ingredient 1",
-        "Ingredient 2",
-        "Ingredient 3"
+        "2 Tbsp olive oil",
+        "1 cup diced onion",
+        "2 cloves garlic"
       ],
       "instructions": [
-        "Step 1 of the recipe",
-        "Step 2 of the recipe",
-        "Step 3 of the recipe"
+        "Step 1: Heat oil in pan",
+        "Step 2: Add onions and cook until soft",
+        "Step 3: Add garlic and cook 30 seconds"
       ]
     }
   ]
 }</code></pre>
-      <h3>Required Fields:</h3>
-      <ul>
-        <li><strong>title</strong>: The title of your meal plan</li>
-        <li><strong>tasks</strong>: An array of tasks, each with a "time" and "text" field</li>
-        <li><strong>recipes</strong>: An array of recipes, each with:
-          <ul>
-            <li><strong>name</strong>: The recipe name</li>
-            <li><strong>ingredients</strong>: An array of ingredient strings</li>
-            <li><strong>instructions</strong>: An array of instruction step strings</li>
-          </ul>
-        </li>
-      </ul>
-      <p>You can add as many tasks and recipes as needed.</p>
-      <p>Click the "Download Example JSON" button below to get a template you can modify.</p>
+        </div>
+      </div>
     </div>
   </div>
-  
-  <div id="content-section" class="hidden">
-    <h2 id="title">Loading...</h2>
-    <button id="noSleepButton" class="toggle-button" onclick="toggleNoSleep()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
-      </svg>
-      <span class="button-text">Keep Screen On</span>
-    </button>
-    
-    <div class="time-shift-container">
-      <label for="target-time">Target Dinner Time:</label>
-      <input type="time" id="target-time" class="time-input">
-      <button onclick="shiftTimes()" class="secondary-button">Adjust Timeline</button>
+
+  <div id="plan-tab" class="tab-content">
+    <div class="plan-section">
+      <h2>Create a New Meal Plan</h2>
+      <p>Upload a JSON file or paste your meal plan. Need help with the format? Check the <strong>About</strong> tab for details.</p>
+      
+      <div class="upload-container">
+        <div class="upload-options">
+          <div class="file-upload">
+            <input type="file" id="fileInput" accept=".json" onchange="handleFileSelect(event)" style="display: none;">
+            <button onclick="document.getElementById('fileInput').click()" class="upload-btn">Upload JSON File</button>
+          </div>
+          <div class="paste-upload">
+            <textarea id="jsonInput" placeholder="Paste your JSON here..." rows="10" style="width: 100%;"></textarea>
+            <button onclick="handleJsonInput()">Load Plan</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <ul id="checklist"></ul>
-    <h2>Recipes</h2>
-    <div id="recipes"></div>
-    <button onclick="document.getElementById('upload-section').classList.remove('hidden'); document.getElementById('content-section').classList.add('hidden');">
-      Back to Upload
-    </button>
+    <div class="saved-plans">
+      <h2>Saved Plans</h2>
+      <div id="saved-plans-container"></div>
+    </div>
+  </div>
+
+  <div id="cook-tab" class="tab-content">
+    <div class="cook-header">
+      <h1 id="title">Mealstorm</h1>
+      <button id="noSleepBtn" class="no-sleep-btn" onclick="toggleNoSleep()">
+        <span class="icon">🔒</span> Keep Screen On
+      </button>
+    </div>
+    <div id="recipe-container" class="recipe-container">
+      <div class="recipe-tabs" id="recipe-tabs"></div>
+      <div class="recipe-content" id="recipe-content"></div>
+    </div>
+
   </div>
 </body>
 </html>
