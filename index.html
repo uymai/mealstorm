@@ -272,10 +272,12 @@
       display: inline-block;
       padding: 8px 16px;
       background: #2196F3;
+
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+
       font-size: 14px;
     }
 
@@ -467,6 +469,7 @@
         
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       }
+
       
       return '';
     }
@@ -928,6 +931,7 @@
     function handleJsonInput() {
       const jsonInput = document.getElementById('jsonInput');
       if (!jsonInput || !jsonInput.value) return;
+
       
       try {
         const data = JSON.parse(jsonInput.value);
@@ -977,6 +981,7 @@
   </script>
 </head>
 <body>
+
   <div class="main-tabs">
     <button class="main-tab active" onclick="switchTab('about')">About</button>
     <button class="main-tab" onclick="switchTab('plan')">Plan</button>
@@ -1017,6 +1022,7 @@
         <p>Your meal plan should follow this structure:</p>
         <div class="json-format">
           <pre><code>{
+
   "title": "Your Meal Plan Title",
   "tasks": [
     { "time": "4:30pm", "text": "Preheat oven to 450°F" },
@@ -1079,6 +1085,7 @@
       <div class="recipe-tabs" id="recipe-tabs"></div>
       <div class="recipe-content" id="recipe-content"></div>
     </div>
+
   </div>
 </body>
 </html>
