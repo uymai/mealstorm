@@ -2,7 +2,7 @@
   "name": "Mealstorm",
   "short_name": "Mealstorm",
   "description": "Plan and manage your meals with ease",
-  "start_url": "./",
+  "start_url": "https://uymai.github.io/mealstorm/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4CAF50",
