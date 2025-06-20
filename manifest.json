@@ -56,5 +56,14 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "splashscreen/mealstorm_splash_1179x2556.png",
+      "sizes": "1179x2556",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mealstorm App Screenshot"
+    }
   ]
 } 

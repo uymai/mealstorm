@@ -44,6 +44,31 @@ Then open your browser and go to: http://localhost:8000
 
 You can use any HTTP server of your choice to serve the static files.
 
+## Testing
+
+The project uses Playwright for end-to-end testing. To run the tests:
+
+1. Install dependencies:
+   ```
+   npm install
+   ```
+
+2. Install Playwright browsers:
+   ```
+   npx playwright install
+   ```
+
+3. Run the tests:
+   ```
+   npm test
+   ```
+
+Additional test commands:
+- `npm run test:ui` - Run tests with Playwright UI
+- `npm run test:debug` - Run tests in debug mode
+
+The tests run automatically on GitHub Actions for all pushes and pull requests to main branches and feature branches.
+
 ## JSON Format
 
 Your JSON file should follow this structure:
