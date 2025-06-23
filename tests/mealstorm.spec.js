@@ -122,7 +122,7 @@ test.describe('Mealstorm Application', () => {
     expect(iphone16ProSplash.href).toBe('splashscreen/mealstorm_splash_1179x2556.png');
     
     // Verify the media query is correct for iPhone 16 Pro
-    expect(iphone16ProSplash.media).toBe('(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)');
+    expect(iphone16ProSplash.media).toBe('(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)');
   });
 
   test('should have PWA manifest with iPhone 16 Pro screenshot', async ({ page }) => {
