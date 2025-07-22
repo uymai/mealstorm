@@ -462,6 +462,151 @@
       color: #666;
       margin-bottom: 10px;
     }
+    
+    /* Import/Export Styles */
+    .import-export-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .export-section, .import-section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+    
+    .export-section h3, .import-section h3 {
+      margin-top: 0;
+      color: #333;
+    }
+    
+    .recipe-export-area {
+      width: 100%;
+      min-height: 200px;
+      font-family: monospace;
+      font-size: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      resize: vertical;
+    }
+    
+    .recipe-import-area {
+      width: 100%;
+      min-height: 200px;
+      font-family: monospace;
+      font-size: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      resize: vertical;
+    }
+    
+    .recipe-list {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      background: white;
+    }
+    
+    .recipe-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .recipe-item:last-child {
+      border-bottom: none;
+    }
+    
+    .recipe-checkbox {
+      margin-right: 10px;
+    }
+    
+    .recipe-info {
+      flex: 1;
+    }
+    
+    .recipe-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .recipe-details {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .import-actions {
+      margin-top: 15px;
+      text-align: center;
+    }
+    
+    .select-all-container {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      background: #f5f5f5;
+    }
+    
+    .secondary-button {
+      background: #6c757d;
+    }
+    
+    .secondary-button:hover {
+      background: #5a6268;
+    }
+    
+    .warning-button {
+      background: #dc3545;
+    }
+    
+    .warning-button:hover {
+      background: #c82333;
+    }
+    
+    /* Notification Styles */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 6px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+      max-width: 300px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background: #28a745;
+    }
+    
+    .notification.info {
+      background: #17a2b8;
+    }
+    
+    .notification.warning {
+      background: #ffc107;
+      color: #212529;
+    }
+    
+    .notification.error {
+      background: #dc3545;
+    }
   </style>
   <script>
     // Initialize NoSleep instance with error handling
@@ -743,15 +888,27 @@
       // Get the existing saved timelines
       const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
       
-      // Create a unique key using the title and timestamp
-      const timelineKey = `timeline_${Date.now()}`;
+      // Check if a plan with the same title already exists
+      const existingKey = Object.keys(savedTimelines).find(key => 
+        savedTimelines[key].title === data.title
+      );
       
-      // Add the new timeline
-      savedTimelines[timelineKey] = {
-        title: data.title,
-        data: data,
-        timestamp: Date.now()
-      };
+      if (existingKey) {
+        // Update existing plan
+        savedTimelines[existingKey] = {
+          title: data.title,
+          data: data,
+          timestamp: Date.now()
+        };
+      } else {
+        // Create new plan
+        const timelineKey = `timeline_${Date.now()}`;
+        savedTimelines[timelineKey] = {
+          title: data.title,
+          data: data,
+          timestamp: Date.now()
+        };
+      }
       
       // Save back to localStorage
       localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
@@ -842,6 +999,228 @@
       }
     }
 
+    // Meal Plan Import/Export Functions
+    function exportAllMealPlans() {
+      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+      const allMealPlans = [];
+      
+      // Extract all saved meal plans
+      Object.values(savedTimelines).forEach(plan => {
+        if (plan.data) {
+          allMealPlans.push(plan.data);
+        }
+      });
+      
+      // Display meal plans in export area
+      const exportArea = document.getElementById('recipe-export-area');
+      if (exportArea) {
+        if (allMealPlans.length === 0) {
+          exportArea.value = '// No meal plans found.\n// Create and save some meal plans first to export them.';
+        } else {
+          exportArea.value = JSON.stringify(allMealPlans, null, 2);
+        }
+      }
+      
+      // Show feedback
+      if (allMealPlans.length === 0) {
+        showNotification('No meal plans found. Create and save some meal plans first.', 'info');
+      } else {
+        showNotification(`Successfully exported ${allMealPlans.length} meal plan(s).`, 'success');
+      }
+    }
+    
+    function importMealPlans() {
+      const importArea = document.getElementById('recipe-import-area');
+      if (!importArea || !importArea.value.trim()) {
+        showNotification('Please paste meal plan JSON data first.', 'info');
+        return;
+      }
+      
+      try {
+        const mealPlans = JSON.parse(importArea.value);
+        if (!Array.isArray(mealPlans)) {
+          showNotification('Invalid format. Expected an array of meal plans.', 'error');
+          return;
+        }
+        
+        // Validate meal plan format
+        const validMealPlans = mealPlans.filter(plan => 
+          plan.title && 
+          Array.isArray(plan.tasks) && 
+          Array.isArray(plan.recipes)
+        );
+        
+        if (validMealPlans.length === 0) {
+          showNotification('No valid meal plans found in the JSON data.', 'error');
+          return;
+        }
+        
+        // Display meal plans for selection
+        displayMealPlanSelection(validMealPlans);
+        
+      } catch (error) {
+        showNotification('Error parsing JSON. Please check the format.', 'error');
+        console.error('JSON parse error:', error);
+      }
+    }
+    
+    function displayMealPlanSelection(mealPlans) {
+      const recipeList = document.getElementById('recipe-list');
+      const importActions = document.getElementById('import-actions');
+      
+      if (!recipeList || !importActions) return;
+      
+      // Create select all container
+      const selectAllContainer = document.createElement('div');
+      selectAllContainer.className = 'select-all-container';
+      selectAllContainer.innerHTML = `
+        <label>
+          <input type="checkbox" id="select-all-meal-plans" checked onchange="toggleAllMealPlans()">
+          Select All Meal Plans
+        </label>
+      `;
+      
+      // Create meal plan items
+      const mealPlanItems = mealPlans.map((plan, index) => `
+        <div class="recipe-item">
+          <input type="checkbox" class="recipe-checkbox" id="meal-plan-${index}" checked>
+          <div class="recipe-info">
+            <div class="recipe-name">${plan.title}</div>
+            <div class="recipe-details">
+              ${plan.tasks.length} tasks • ${plan.recipes.length} recipes
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      recipeList.innerHTML = '';
+      recipeList.appendChild(selectAllContainer);
+      recipeList.innerHTML += mealPlanItems;
+      
+      // Show import actions
+      importActions.innerHTML = `
+        <button onclick="confirmImportMealPlans(${JSON.stringify(mealPlans).replace(/"/g, '&quot;')})">
+          Import Selected Meal Plans
+        </button>
+        <button onclick="cancelImport()" class="secondary-button">Cancel</button>
+      `;
+      
+      // Show the recipe selection area
+      document.getElementById('recipe-selection-area').style.display = 'block';
+    }
+    
+    function toggleAllMealPlans() {
+      const selectAll = document.getElementById('select-all-meal-plans');
+      const checkboxes = document.querySelectorAll('.recipe-checkbox');
+      
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAll.checked;
+      });
+    }
+    
+    function confirmImportMealPlans(mealPlans) {
+      const checkboxes = document.querySelectorAll('.recipe-checkbox');
+      const selectedMealPlans = [];
+      
+      checkboxes.forEach((checkbox, index) => {
+        if (checkbox.checked && mealPlans[index]) {
+          selectedMealPlans.push(mealPlans[index]);
+        }
+      });
+      
+      if (selectedMealPlans.length === 0) {
+        showNotification('Please select at least one meal plan to import.', 'info');
+        return;
+      }
+      
+      // Save meal plans to localStorage
+      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+      
+      // Add new meal plans, avoiding duplicates by title
+      selectedMealPlans.forEach(newMealPlan => {
+        const existingKey = Object.keys(savedTimelines).find(key => 
+          savedTimelines[key].title === newMealPlan.title
+        );
+        
+        if (existingKey) {
+          // Update existing meal plan
+          savedTimelines[existingKey] = {
+            title: newMealPlan.title,
+            data: newMealPlan,
+            timestamp: Date.now()
+          };
+        } else {
+          // Add new meal plan
+          const timelineKey = `timeline_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          savedTimelines[timelineKey] = {
+            title: newMealPlan.title,
+            data: newMealPlan,
+            timestamp: Date.now()
+          };
+        }
+      });
+      
+      localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
+      
+      showNotification(`Successfully imported ${selectedMealPlans.length} meal plan(s)!`, 'success');
+      
+      // Clear the import area and hide selection
+      document.getElementById('recipe-import-area').value = '';
+      document.getElementById('recipe-selection-area').style.display = 'none';
+      document.getElementById('import-actions').innerHTML = '';
+      
+      // Update meal plan status and saved plans list
+      updateMealPlanStatus();
+      updateSavedPlansList();
+    }
+    
+    function cancelImport() {
+      document.getElementById('recipe-import-area').value = '';
+      document.getElementById('recipe-selection-area').style.display = 'none';
+      document.getElementById('import-actions').innerHTML = '';
+    }
+    
+    function updateMealPlanStatus() {
+      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
+      
+      const statusElement = document.getElementById('recipe-status');
+      if (statusElement) {
+        statusElement.innerHTML = `
+          <strong>Saved Meal Plans:</strong> ${Object.keys(savedTimelines).length} meal plan(s)<br>
+          <small>Note: Imported meal plans are saved to your browser storage and will appear in the Plan tab.</small>
+        `;
+      }
+    }
+    
+    function showNotification(message, type = 'info') {
+      // Remove any existing notifications
+      const existingNotifications = document.querySelectorAll('.notification');
+      existingNotifications.forEach(notification => notification.remove());
+      
+      // Create new notification
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      
+      // Add to page
+      document.body.appendChild(notification);
+      
+      // Show notification
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 10);
+      
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+    
     // Function to initialize event listeners
     function initializeEventListeners() {
       // Help button
@@ -1018,6 +1397,11 @@
       
       // Activate selected tab
       document.querySelector(`.main-tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+      
+      // Update meal plan status when showing bulk tabs
+      if (tabName === 'bulk-export' || tabName === 'bulk-import') {
+        updateMealPlanStatus();
+      }
     }
   </script>
 </head>
@@ -1026,6 +1410,8 @@
     <button class="main-tab active" onclick="switchTab('about')">About</button>
     <button class="main-tab" onclick="switchTab('plan')">Plan</button>
     <button class="main-tab" onclick="switchTab('cook')">Cook</button>
+    <button class="main-tab" onclick="switchTab('bulk-export')">Bulk Export</button>
+    <button class="main-tab" onclick="switchTab('bulk-import')">Bulk Import</button>
   </div>
 
   <div id="about-tab" class="tab-content active">
@@ -1124,6 +1510,104 @@
     <div id="recipe-container" class="recipe-container">
       <div class="recipe-tabs" id="recipe-tabs"></div>
       <div class="recipe-content" id="recipe-content"></div>
+    </div>
+  </div>
+
+  <div id="bulk-export-tab" class="tab-content">
+    <div class="import-export-container">
+      <h1>Bulk Export Meal Plans</h1>
+      <p>Export all your saved meal plans as JSON for backup or sharing.</p>
+      
+      <!-- Current Meal Plan Status -->
+      <div class="about-section-content">
+        <h3>Current Meal Plan Status</h3>
+        <p id="recipe-status">Loading...</p>
+      </div>
+      
+      <!-- Export Section -->
+      <div class="export-section">
+        <h3>Export All Meal Plans</h3>
+        <p>Export all your saved meal plans as JSON. This will include all meal plans with their tasks and recipes.</p>
+        <button onclick="exportAllMealPlans()">Export Meal Plans</button>
+        <textarea id="recipe-export-area" class="recipe-export-area" placeholder="Click 'Export Meal Plans' to see your meal plans here..." readonly></textarea>
+      </div>
+      
+      <!-- Export Instructions -->
+      <div class="about-section-content">
+        <h3>Export Instructions</h3>
+        <ol>
+          <li>Click the "Export Meal Plans" button above</li>
+          <li>Copy the JSON data from the text area</li>
+          <li>Save it to a file or share it with others</li>
+          <li>Use the "Bulk Import" tab to import these meal plans on another device</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div id="bulk-import-tab" class="tab-content">
+    <div class="import-export-container">
+      <h1>Bulk Import Meal Plans</h1>
+      <p>Import meal plans from JSON data or files.</p>
+      
+      <!-- Import Section -->
+      <div class="import-section">
+        <h3>Import Meal Plans</h3>
+        <p>Paste a JSON array of meal plans to import them into your browser storage. Each meal plan should have a title, tasks array, and recipes array.</p>
+        <textarea id="recipe-import-area" class="recipe-import-area" placeholder="Paste your meal plan JSON array here..."></textarea>
+        <button onclick="importMealPlans()">Import Meal Plans</button>
+        
+        <!-- Meal Plan Selection Area (hidden by default) -->
+        <div id="recipe-selection-area" style="display: none;">
+          <h4>Select Meal Plans to Import:</h4>
+          <div id="recipe-list" class="recipe-list"></div>
+          <div id="import-actions" class="import-actions"></div>
+        </div>
+      </div>
+      
+      <!-- Meal Plan Format Guide -->
+      <div class="about-section-content">
+        <h3>Meal Plan Format</h3>
+        <p>Meal plans should be in this format:</p>
+        <div class="json-format">
+          <pre><code>[
+  {
+    "title": "Dinner Party",
+    "tasks": [
+      { "time": "4:30pm", "text": "Preheat oven to 450°F" },
+      { "time": "4:45pm", "text": "Toss and roast potatoes" }
+    ],
+    "recipes": [
+      {
+        "name": "Recipe Name",
+        "ingredients": [
+          "2 Tbsp olive oil",
+          "1 cup diced onion",
+          "2 cloves garlic"
+        ],
+        "instructions": [
+          "Step 1: Heat oil in pan",
+          "Step 2: Add onions and cook until soft",
+          "Step 3: Add garlic and cook 30 seconds"
+        ]
+      }
+    ]
+  }
+]</code></pre>
+        </div>
+      </div>
+      
+      <!-- Import Instructions -->
+      <div class="about-section-content">
+        <h3>Import Instructions</h3>
+        <ol>
+          <li>Paste your meal plan JSON data into the text area above</li>
+          <li>Click "Import Meal Plans" to validate the data</li>
+          <li>Select which meal plans you want to import (all selected by default)</li>
+          <li>Click "Import Selected Meal Plans" to complete the import</li>
+          <li>Imported meal plans will appear in the "Plan" tab</li>
+        </ol>
+      </div>
     </div>
   </div>
 </body>

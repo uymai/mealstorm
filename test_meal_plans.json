@@ -1,0 +1,79 @@
+[
+  {
+    "title": "Italian Dinner Party",
+    "tasks": [
+      { "time": "4:30pm", "text": "Preheat oven to 450°F" },
+      { "time": "4:45pm", "text": "Start boiling water for pasta" },
+      { "time": "5:00pm", "text": "Cook pasta according to package directions" },
+      { "time": "5:15pm", "text": "Prepare carbonara sauce" },
+      { "time": "5:25pm", "text": "Combine pasta and sauce" },
+      { "time": "5:30pm", "text": "Serve dinner" }
+    ],
+    "recipes": [
+      {
+        "name": "Spaghetti Carbonara",
+        "ingredients": [
+          "1 pound spaghetti",
+          "4 large eggs",
+          "1/2 cup grated Pecorino Romano cheese",
+          "1/2 cup grated Parmigiano-Reggiano cheese",
+          "4 ounces pancetta or guanciale, diced",
+          "4 cloves garlic, minced",
+          "1/2 teaspoon black pepper",
+          "Salt to taste"
+        ],
+        "instructions": [
+          "Bring a large pot of salted water to boil and cook spaghetti according to package directions",
+          "While pasta cooks, heat a large skillet over medium heat",
+          "Add pancetta and cook until crispy, about 5-7 minutes",
+          "Add garlic and cook for 30 seconds until fragrant",
+          "In a bowl, whisk together eggs, cheeses, and black pepper",
+          "Drain pasta, reserving 1 cup of pasta water",
+          "Add hot pasta to the skillet with pancetta",
+          "Remove from heat and quickly stir in egg mixture",
+          "Add pasta water as needed to create a creamy sauce",
+          "Serve immediately with extra cheese and black pepper"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Asian Stir Fry Night",
+    "tasks": [
+      { "time": "6:00pm", "text": "Prepare rice cooker" },
+      { "time": "6:15pm", "text": "Start cooking rice" },
+      { "time": "6:30pm", "text": "Marinate chicken" },
+      { "time": "6:45pm", "text": "Heat wok and begin stir frying" },
+      { "time": "7:00pm", "text": "Serve stir fry over rice" }
+    ],
+    "recipes": [
+      {
+        "name": "Chicken Stir Fry",
+        "ingredients": [
+          "1 pound chicken breast, sliced",
+          "2 tablespoons soy sauce",
+          "1 tablespoon cornstarch",
+          "2 tablespoons vegetable oil",
+          "2 cloves garlic, minced",
+          "1 inch ginger, minced",
+          "2 cups mixed vegetables",
+          "2 tablespoons oyster sauce",
+          "1 teaspoon sesame oil",
+          "Green onions for garnish"
+        ],
+        "instructions": [
+          "Slice chicken and marinate with soy sauce and cornstarch for 15 minutes",
+          "Heat oil in a wok or large skillet over high heat",
+          "Add chicken and stir-fry until cooked through, about 5 minutes",
+          "Remove chicken and set aside",
+          "Add garlic and ginger, stir-fry for 30 seconds",
+          "Add vegetables and stir-fry for 3-4 minutes",
+          "Return chicken to the pan",
+          "Add oyster sauce and stir to combine",
+          "Drizzle with sesame oil",
+          "Garnish with green onions and serve over rice"
+        ]
+      }
+    ]
+  }
+] 
