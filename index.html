@@ -5,66 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Mealstorm</title>
   <script src="https://cdn.jsdelivr.net/npm/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
-  
+
   <!-- Web App Manifest -->
   <link rel="manifest" href="manifest.json">
-  
+
   <!-- iOS Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Mealstorm">
   <meta name="format-detection" content="telephone=no">
   <meta name="theme-color" content="#2196F3">
-  
+
   <!-- Additional PWA Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Mealstorm">
   <meta name="msapplication-TileColor" content="#2196F3">
   <meta name="msapplication-TileImage" content="icons/mealstorm_blue_icon_144x144.png">
-  
+
   <!-- iOS Icons -->
   <link rel="apple-touch-icon" href="icons/mealstorm_blue_icon_256x256.png">
   <link rel="apple-touch-icon" sizes="256x256" href="icons/mealstorm_blue_icon_256x256.png">
   <link rel="apple-touch-icon" sizes="512x512" href="icons/mealstorm_blue_icon_512x512.png">
   <link rel="apple-touch-icon" sizes="1024x1024" href="icons/mealstorm_blue_icon_1024x1024.png">
-  
+
   <!-- iOS Splash Screens -->
-  <!-- iPhone SE, iPod Touch -->
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
-  
-  <!-- iPhone 8, 7, 6s, 6 -->
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
-  
-  <!-- iPhone X, XS -->
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
-  
-  <!-- iPhone XS Max -->
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
-
-  <!-- iPhone 15 Pro / 14 Pro portrait 393×852 @3x → 1179×2556 -->
-  <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-  <!-- iPhone 16 Pro (portrait) 402×874 @3x → 1206×2622 -->
-  <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1206x2622.png" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-
-  <!-- Android Phones -->
+  <!-- iPhone 15 Pro: 393×852 @3x → 1179×2556 -->
+  <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)">
+  <!-- iPhone 16 Pro: same logical points as 15 Pro but pixel ratio ~3.125 → 1206×2622 -->
+  <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1206x2622.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3.125)">
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1080x1920.png" media="(device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3)">
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1280x1920.png" media="(device-width: 384px) and (device-height: 576px) and (-webkit-device-pixel-ratio: 2)">
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1440x2960.png" media="(device-width: 360px) and (device-height: 740px) and (-webkit-device-pixel-ratio: 3)">
-  
-  <!-- iPad Mini, Air -->
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1536x2048.png" media="(min-device-width: 768px) and (max-device-width: 1024px)">
-  
-  <!-- iPad Pro 10.5" -->
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_1668x2224.png" media="(min-device-width: 834px) and (max-device-width: 834px)">
-  
-  <!-- iPad Pro 12.9" -->
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_2048x2732.png" media="(min-device-width: 1024px) and (max-device-width: 1024px)">
-  
-  <!-- Default splash screen -->
   <link rel="apple-touch-startup-image" href="splashscreen/mealstorm_splash_2048x2732.png">
-  
-  <!-- Add Font Awesome -->
+
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -81,16 +64,8 @@
       -webkit-user-select: none;
       user-select: none;
     }
-    .file-upload {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px dashed #ccc;
-      border-radius: 5px;
-      text-align: center;
-    }
-    .hidden {
-      display: none;
-    }
+
+    /* ── Buttons ── */
     button {
       padding: 8px 16px;
       background: #2196F3;
@@ -100,31 +75,31 @@
       cursor: pointer;
       margin: 5px;
     }
-    button:hover {
-      background: #1976D2;
-    }
-    .help-button {
+    button:hover { background: #1976D2; }
+
+    .warning-button { background: #f44336; }
+    .warning-button:hover { background: #d32f2f; }
+
+    .secondary-button { background: #607d8b; }
+    .secondary-button:hover { background: #455a64; }
+
+    .upload-btn {
+      display: inline-block;
+      padding: 8px 16px;
       background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
     }
-    .help-button:hover {
-      background: #1976D2;
-    }
-    .warning-button {
-      background: #f44336;
-    }
-    .warning-button:hover {
-      background: #d32f2f;
-    }
-    .secondary-button {
-      background: #607d8b;
-    }
-    .secondary-button:hover {
-      background: #455a64;
-    }
+    .upload-btn:hover { background: #1976D2; }
+
+    /* ── Modal ── */
     .modal {
       display: none;
       position: fixed;
-      z-index: 1;
+      z-index: 1000;
       left: 0;
       top: 0;
       width: 100%;
@@ -138,8 +113,9 @@
       padding: 20px;
       border: 1px solid #888;
       width: 80%;
-      max-width: 700px;
-      border-radius: 5px;
+      max-width: 600px;
+      border-radius: 8px;
+      position: relative;
     }
     .close {
       color: #aaa;
@@ -148,9 +124,12 @@
       font-weight: bold;
       cursor: pointer;
     }
-    .close:hover {
+    .close:hover, .close:focus {
       color: black;
+      text-decoration: none;
     }
+
+    /* ── Typography / shared ── */
     pre {
       background-color: #f5f5f5;
       padding: 10px;
@@ -160,6 +139,92 @@
     code {
       font-family: Consolas, Monaco, 'Andale Mono', monospace;
     }
+    .hidden { display: none; }
+    input[type="file"] { display: none; }
+
+    /* ── Main tabs ── */
+    .main-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ddd;
+    }
+    .main-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 16px;
+      color: #666;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    .main-tab.active {
+      color: #2196F3;
+      border-bottom: 2px solid #2196F3;
+      font-weight: bold;
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── About tab ── */
+    .about-section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .about-section-content { margin-bottom: 40px; }
+    .about-section h1, .about-section h2 { color: #2196F3; margin-bottom: 15px; }
+    .about-section h1 { margin-bottom: 30px; }
+    .about-section p { line-height: 1.6; margin-bottom: 15px; }
+    .about-section ol, .about-section ul { margin-left: 20px; margin-bottom: 15px; }
+    .about-section li { margin-bottom: 8px; }
+    .about-section a { color: #2196F3; text-decoration: none; }
+    .about-section a:hover { text-decoration: underline; }
+
+    /* ── Plan tab ── */
+    .plan-section {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .plan-section h2 { color: #2196F3; margin-top: 0; }
+
+    .upload-container {
+      margin: 20px 0;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    .upload-options {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .file-upload {
+      flex: 1;
+      min-width: 200px;
+      padding: 15px;
+      border: 1px dashed #ccc;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .paste-upload {
+      flex: 2;
+      min-width: 300px;
+    }
+    .paste-upload textarea {
+      width: 100%;
+      height: 150px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+
     .saved-plans {
       margin: 15px 0;
       border-top: 1px solid #eee;
@@ -183,6 +248,37 @@
       display: flex;
       gap: 5px;
     }
+
+    .json-format {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 15px 0;
+    }
+
+    /* ── Cook tab ── */
+    .cook-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .no-sleep-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 16px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .no-sleep-btn:hover { background: #1976D2; }
+    .no-sleep-btn.active { background: #4CAF50; }
+    .no-sleep-btn.active:hover { background: #45a049; }
+
     .recipe-container {
       display: flex;
       gap: 20px;
@@ -213,80 +309,18 @@
       background-color: #1976D2;
       color: white;
     }
-    .recipe-content {
-      flex: 1;
-    }
-    .recipe-section {
-      display: none;
-    }
-    .recipe-section.active {
-      display: block;
-    }
-    .steps-section {
-      margin-bottom: 20px;
-    }
-    .recipe-title {
-      margin-top: 0;
-      color: #2196F3;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.4);
-    }
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 600px;
-      border-radius: 8px;
-      position: relative;
-    }
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .help-content {
-      margin-top: 20px;
-    }
-    .help-content pre {
-      background-color: #f5f5f5;
-      padding: 15px;
-      border-radius: 4px;
-      overflow-x: auto;
-    }
-    .help-content ul {
-      list-style-type: disc;
-      margin-left: 20px;
-    }
-    .help-content li {
-      margin: 8px 0;
-    }
+    .recipe-content { flex: 1; }
+    .recipe-section { display: none; }
+    .recipe-section.active { display: block; }
+    .recipe-title { margin-top: 0; color: #2196F3; }
+
     .checklist-item {
       display: flex;
       align-items: center;
       padding: 10px;
       border-bottom: 1px solid #eee;
     }
-    .checklist-item input[type="checkbox"] {
-      margin-right: 10px;
-    }
+    .checklist-item input[type="checkbox"] { margin-right: 10px; }
     .checklist-item label {
       display: flex;
       align-items: center;
@@ -298,179 +332,25 @@
       margin-right: 10px;
       min-width: 80px;
     }
-    .checklist-item .task {
-      flex: 1;
-    }
+    .checklist-item .task { flex: 1; }
     .checklist-item input[type="checkbox"]:checked + label {
       text-decoration: line-through;
       color: #888;
     }
-    .upload-container {
-      margin: 20px 0;
-      padding: 20px;
-      background: #f5f5f5;
-      border-radius: 8px;
-    }
-    .upload-options {
+
+    .time-shift-container {
       display: flex;
-      gap: 20px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
       flex-wrap: wrap;
     }
-    .file-upload {
-      flex: 1;
-      min-width: 200px;
-    }
-    .json-input {
-      flex: 2;
-      min-width: 300px;
-    }
-    .json-input textarea {
-      width: 100%;
-      height: 150px;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-family: monospace;
-      resize: vertical;
-    }
-    .upload-btn {
-      display: inline-block;
-      padding: 8px 16px;
-      background: #2196F3;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .upload-btn:hover {
-      background: #1976D2;
-    }
-    input[type="file"] {
-      display: none;
-    }
-    .main-tabs {
-      display: flex;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #ddd;
-    }
-    .main-tab {
-      padding: 10px 20px;
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-size: 16px;
-      color: #666;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
-    }
-    .main-tab.active {
-      color: #2196F3;
-      border-bottom: 2px solid #2196F3;
-      font-weight: bold;
-    }
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
-    }
-    .plan-section {
-      background: #f9f9f9;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-    .plan-section h2 {
-      color: #2196F3;
-      margin-top: 0;
-    }
-    .json-format {
-      background: #f5f5f5;
-      padding: 15px;
-      border-radius: 4px;
-      margin: 15px 0;
-    }
-    .about-section {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .about-section-content {
-      margin-bottom: 40px;
-    }
-    .about-section h1 {
-      color: #2196F3;
-      margin-bottom: 30px;
-    }
-    .about-section h2 {
-      color: #2196F3;
-      margin-bottom: 15px;
-    }
-    .about-section p {
-      line-height: 1.6;
-      margin-bottom: 15px;
-    }
-    .about-section ol, .about-section ul {
-      margin-left: 20px;
-      margin-bottom: 15px;
-    }
-    .about-section li {
-      margin-bottom: 8px;
-    }
-    .about-section a {
-      color: #2196F3;
-      text-decoration: none;
-    }
-    .about-section a:hover {
-      text-decoration: underline;
-    }
-    .cook-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .no-sleep-btn {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 8px 16px;
-      background: #2196F3;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .no-sleep-btn:hover {
-      background: #1976D2;
-    }
-    .no-sleep-btn .icon {
-      font-size: 16px;
-    }
-    .no-sleep-btn.active {
-      background: #4CAF50;
-    }
-    .no-sleep-btn.active:hover {
-      background: #45a049;
-    }
-    .icon {
-      margin-right: 5px;
-    }
-    .file-upload-icon {
-      font-size: 2em;
-      color: #666;
-      margin-bottom: 10px;
-    }
-    
-    /* Import/Export Styles */
+
+    /* ── Import / Export tabs ── */
     .import-export-container {
       max-width: 800px;
       margin: 0 auto;
     }
-    
     .export-section, .import-section {
       margin: 20px 0;
       padding: 20px;
@@ -478,13 +358,13 @@
       border-radius: 8px;
       background: #f9f9f9;
     }
-    
     .export-section h3, .import-section h3 {
       margin-top: 0;
       color: #333;
     }
-    
-    .recipe-export-area {
+
+    /* Shared textarea style for export and import areas */
+    .json-textarea {
       width: 100%;
       min-height: 200px;
       font-family: monospace;
@@ -493,19 +373,9 @@
       border-radius: 4px;
       padding: 10px;
       resize: vertical;
+      box-sizing: border-box;
     }
-    
-    .recipe-import-area {
-      width: 100%;
-      min-height: 200px;
-      font-family: monospace;
-      font-size: 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      padding: 10px;
-      resize: vertical;
-    }
-    
+
     .recipe-list {
       max-height: 400px;
       overflow-y: auto;
@@ -514,64 +384,29 @@
       padding: 10px;
       background: white;
     }
-    
     .recipe-item {
       display: flex;
       align-items: center;
       padding: 10px;
       border-bottom: 1px solid #eee;
     }
-    
-    .recipe-item:last-child {
-      border-bottom: none;
-    }
-    
-    .recipe-checkbox {
-      margin-right: 10px;
-    }
-    
-    .recipe-info {
-      flex: 1;
-    }
-    
-    .recipe-name {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    
-    .recipe-details {
-      font-size: 12px;
-      color: #666;
-    }
-    
+    .recipe-item:last-child { border-bottom: none; }
+    .recipe-checkbox { margin-right: 10px; }
+    .recipe-info { flex: 1; }
+    .recipe-name { font-weight: bold; margin-bottom: 5px; }
+    .recipe-details { font-size: 12px; color: #666; }
+
     .import-actions {
       margin-top: 15px;
       text-align: center;
     }
-    
     .select-all-container {
       padding: 10px;
       border-bottom: 1px solid #ddd;
       background: #f5f5f5;
     }
-    
-    .secondary-button {
-      background: #6c757d;
-    }
-    
-    .secondary-button:hover {
-      background: #5a6268;
-    }
-    
-    .warning-button {
-      background: #dc3545;
-    }
-    
-    .warning-button:hover {
-      background: #c82333;
-    }
-    
-    /* Notification Styles */
+
+    /* ── Notifications ── */
     .notification {
       position: fixed;
       top: 20px;
@@ -587,870 +422,57 @@
       max-width: 300px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
-    
-    .notification.show {
-      opacity: 1;
-      transform: translateX(0);
-    }
-    
-    .notification.success {
-      background: #28a745;
-    }
-    
-    .notification.info {
-      background: #17a2b8;
-    }
-    
-    .notification.warning {
-      background: #ffc107;
-      color: #212529;
-    }
-    
-    .notification.error {
-      background: #dc3545;
-    }
+    .notification.show { opacity: 1; transform: translateX(0); }
+    .notification.success { background: #28a745; }
+    .notification.info { background: #17a2b8; }
+    .notification.warning { background: #ffc107; color: #212529; }
+    .notification.error { background: #dc3545; }
   </style>
-  <script>
-    // Initialize NoSleep instance with error handling
-    let noSleep;
-    try {
-      noSleep = new NoSleep();
-    } catch (error) {
-      console.warn('NoSleep.js not available:', error);
-      // Create a dummy NoSleep object for unsupported browsers
-      noSleep = {
-        enable: () => Promise.resolve(),
-        disable: () => {}
-      };
-    }
-    let isNoSleepEnabled = false;
-    let originalTasks = null; // Store original task times
-
-    // Time conversion functions
-    function to24Hour(timeStr) {
-      if (!timeStr) return '';
-      
-      // Handle already 24-hour format (HH:mm)
-      if (timeStr.match(/^\d{1,2}:\d{2}$/)) {
-        const [hours, minutes] = timeStr.split(':').map(Number);
-        if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
-          return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-        }
-      }
-      
-      // Handle 12-hour format (e.g., "4:00 PM", "4 PM", "4:00pm")
-      const match = timeStr.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)/i);
-      if (match) {
-        let [_, hours, minutes, period] = match;
-        hours = parseInt(hours);
-        minutes = minutes ? parseInt(minutes) : 0;
-        
-        if (hours < 1 || hours > 12 || minutes < 0 || minutes > 59) {
-          return '';
-        }
-        
-        if (period.toLowerCase() === 'pm' && hours !== 12) {
-          hours += 12;
-        } else if (period.toLowerCase() === 'am' && hours === 12) {
-          hours = 0;
-        }
-        
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      }
-
-      
-      return '';
-    }
-
-    function to12Hour(timeStr) {
-      if (!timeStr) return '';
-      
-      // Handle 12-hour format
-      if (timeStr.match(/\d{1,2}:\d{2}\s*(am|pm)/i)) {
-        return timeStr;
-      }
-      
-      // Handle 24-hour format
-      const [hours, minutes] = timeStr.split(':').map(Number);
-      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-        return '';
-      }
-      
-      const period = hours >= 12 ? 'PM' : 'AM';
-      const displayHours = hours % 12 || 12;
-      return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
-    }
-
-    function timeToMinutes(timeStr) {
-      if (!timeStr) return 0;
-      
-      const [hours, minutes] = timeStr.split(':').map(Number);
-      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-        return 0;
-      }
-      
-      return hours * 60 + minutes;
-    }
-
-    function minutesToTime(minutes) {
-      if (typeof minutes !== 'number' || isNaN(minutes) || minutes < 0 || minutes >= 24 * 60) {
-        return '';
-      }
-      
-      const hours = Math.floor(minutes / 60);
-      const mins = minutes % 60;
-      return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-    }
-
-    // Function to toggle NoSleep
-    function toggleNoSleep() {
-      const noSleepBtn = document.getElementById('noSleepBtn');
-      if (!noSleepBtn) return;
-
-      if (!noSleep) {
-        noSleep = new NoSleep();
-        noSleep.enable();
-        noSleepBtn.classList.add('active');
-        noSleepBtn.innerHTML = '<span class="icon">🔓</span> Screen On';
-      } else {
-        noSleep.disable();
-        noSleep = null;
-        noSleepBtn.classList.remove('active');
-        noSleepBtn.innerHTML = '<span class="icon">🔒</span> Keep Screen On';
-      }
-    }
-
-    // Function to show recipe section
-    function showRecipeSection(sectionId) {
-      // Hide all sections
-      const sections = document.querySelectorAll('.recipe-section');
-      sections.forEach(section => {
-        section.classList.remove('active');
-      });
-      
-      // Show selected section
-      const selectedSection = document.getElementById(sectionId);
-      if (selectedSection) {
-        selectedSection.classList.add('active');
-      }
-      
-      // Update tab states
-      const tabs = document.querySelectorAll('.recipe-tab');
-      tabs.forEach(tab => {
-        tab.classList.remove('active');
-        if (tab.getAttribute('data-section') === sectionId) {
-          tab.classList.add('active');
-        }
-      });
-    }
-
-    // Function to process the JSON data
-    function processData(data, savePlan = true) {
-      if (!data || !data.tasks) {
-        console.error('Invalid data format');
-        return;
-      }
-
-      // Update title
-      const titleElement = document.getElementById('title');
-      if (titleElement) {
-        titleElement.textContent = data.title || 'Mealstorm';
-      }
-      
-      originalTasks = [...data.tasks]; // Store original tasks
-      
-      // Set the target time input to the last task's time
-      const timeInput = document.getElementById('target-time');
-      if (timeInput && data.tasks.length > 0) {
-        const lastTask = data.tasks[data.tasks.length - 1];
-        if (lastTask && lastTask.time) {
-          const time24 = to24Hour(lastTask.time);
-          if (time24) {
-            timeInput.value = time24;
-          }
-        }
-      }
-      
-      // Create tabs container
-      const tabsContainer = document.querySelector('.recipe-tabs');
-      tabsContainer.innerHTML = '<div class="recipe-tab active" data-section="steps-section" onclick="showRecipeSection(\'steps-section\')">Timeline Steps</div>';
-      
-      // Create content container
-      const contentContainer = document.querySelector('.recipe-content');
-      contentContainer.innerHTML = `
-        <div id="steps-section" class="recipe-section active">
-          <div class="time-shift-container">
-            <label for="target-time">Target Time:</label>
-            <input type="time" id="target-time" step="60">
-            <button onclick="shiftTimes()">Adjust Timeline</button>
-          </div>
-          <div id="checklist"></div>
-        </div>
-      `;
-      
-      // Get the checklist element after creating the content
-      const list = document.getElementById('checklist');
-      if (!list) {
-        console.error('Checklist element not found');
-        return;
-      }
-      
-      list.innerHTML = ''; // Clear previous content
-      
-      // Process tasks and create recipe tabs
-      data.tasks.forEach((task, index) => {
-        // Add task to checklist
-        const item = document.createElement('div');
-        item.className = 'checklist-item';
-        item.innerHTML = `
-          <input type="checkbox" id="task${index}" onchange="updateTaskStatus(${index})">
-          <label for="task${index}">
-            <span class="time">${task.time}</span>
-            <span class="task">${task.text || task.task}</span>
-          </label>
-        `;
-        list.appendChild(item);
-      });
-
-      // Add recipe tabs and sections
-      if (data.recipes) {
-        data.recipes.forEach((recipe, index) => {
-          const tabId = `recipe-${index}`;
-          
-          // Add recipe tab
-          const tab = document.createElement('div');
-          tab.className = 'recipe-tab';
-          tab.textContent = recipe.name;
-          tab.setAttribute('data-section', tabId);
-          tab.onclick = () => showRecipeSection(tabId);
-          tabsContainer.appendChild(tab);
-          
-          // Add recipe section
-          const section = document.createElement('div');
-          section.id = tabId;
-          section.className = 'recipe-section';
-          section.innerHTML = `
-            <h3>${recipe.name}</h3>
-            <div class="recipe-ingredients">
-              <h4>Ingredients:</h4>
-              <ul>
-                ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}
-              </ul>
-            </div>
-            <div class="recipe-steps">
-              <h4>Steps:</h4>
-              <ol>
-                ${recipe.instructions.map(step => `<li>${step}</li>`).join('')}
-              </ol>
-            </div>
-          `;
-          contentContainer.appendChild(section);
-        });
-      }
-      
-      // Save to localStorage if requested
-      if (savePlan) {
-        localStorage.setItem('currentMealPlan', JSON.stringify(data));
-        // Also save to saved timelines
-        saveTimelineToStorage(data);
-        // Update the saved plans list
-        updateSavedPlansList();
-      }
-    }
-
-    // Function to shift times based on new target time
-    function shiftTimes() {
-      const timeInput = document.getElementById('target-time');
-      if (!timeInput || !timeInput.value || !originalTasks) return;
-      
-      const newTargetTime = timeInput.value;
-      const newTargetMinutes = timeToMinutes(newTargetTime);
-      const originalTargetTime = originalTasks[originalTasks.length - 1].time;
-      const originalTargetMinutes = timeToMinutes(to24Hour(originalTargetTime));
-      const timeDiff = newTargetMinutes - originalTargetMinutes;
-      
-      // Update checklist times
-      const checklist = document.getElementById('checklist');
-      if (checklist) {
-        const items = checklist.getElementsByClassName('checklist-item');
-        originalTasks.forEach((task, index) => {
-          if (index < items.length) {
-            const timeSpan = items[index].querySelector('.time');
-            if (timeSpan) {
-              const newTime = minutesToTime(timeToMinutes(to24Hour(task.time)) + timeDiff);
-              timeSpan.textContent = to12Hour(newTime);
-            }
-          }
-        });
-      }
-    }
-
-    // Function to save timeline to localStorage
-    function saveTimelineToStorage(data) {
-      // Get the existing saved timelines
-      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
-      
-      // Check if a plan with the same title already exists
-      const existingKey = Object.keys(savedTimelines).find(key => 
-        savedTimelines[key].title === data.title
-      );
-      
-      if (existingKey) {
-        // Update existing plan
-        savedTimelines[existingKey] = {
-          title: data.title,
-          data: data,
-          timestamp: Date.now()
-        };
-      } else {
-        // Create new plan
-        const timelineKey = `timeline_${Date.now()}`;
-        savedTimelines[timelineKey] = {
-          title: data.title,
-          data: data,
-          timestamp: Date.now()
-        };
-      }
-      
-      // Save back to localStorage
-      localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
-      
-      // Update the saved plans list in the UI
-      updateSavedPlansList();
-    }
-    
-    // Function to update the list of saved plans in the UI
-    function updateSavedPlansList() {
-      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
-      const savedPlansContainer = document.getElementById('saved-plans-container');
-      
-      if (!savedPlansContainer) return;
-      
-      // Clear existing content
-      savedPlansContainer.innerHTML = '';
-      
-      if (Object.keys(savedTimelines).length === 0) {
-        savedPlansContainer.innerHTML = '<p>No saved meal plans yet.</p>';
-        return;
-      }
-      
-      // Sort by most recent first
-      const sortedKeys = Object.keys(savedTimelines).sort((a, b) => 
-        savedTimelines[b].timestamp - savedTimelines[a].timestamp
-      );
-      
-      // Create UI for each saved plan
-      sortedKeys.forEach(key => {
-        const plan = savedTimelines[key];
-        const planElement = document.createElement('div');
-        planElement.className = 'plan-item';
-        planElement.innerHTML = `
-          <div class="plan-title">${plan.title}</div>
-          <div class="plan-actions">
-            <button onclick="loadSavedPlan('${key}')">Load</button>
-            <button onclick="editSavedPlan('${key}')" class="secondary-button">Edit</button>
-            <button onclick="deleteSavedPlan('${key}')" class="warning-button">Delete</button>
-          </div>
-        `;
-        savedPlansContainer.appendChild(planElement);
-      });
-    }
-
-    // Function to load a saved plan
-    function loadSavedPlan(key) {
-      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
-      const plan = savedTimelines[key];
-      if (plan && plan.data) {
-        processData(plan.data);
-        switchTab('cook');
-      }
-    }
-
-    // Function to edit a saved plan
-    function editSavedPlan(key) {
-      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
-      const plan = savedTimelines[key];
-      if (plan && plan.data) {
-        // Switch to plan tab
-        switchTab('plan');
-        // Load the JSON into the textarea
-        const jsonInput = document.getElementById('jsonInput');
-        if (jsonInput) {
-          jsonInput.value = JSON.stringify(plan.data, null, 2);
-          // Scroll the textarea into view
-          jsonInput.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    }
-
-    // Function to delete a saved plan
-    function deleteSavedPlan(key) {
-      if (confirm('Are you sure you want to delete this saved plan?')) {
-        const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
-        delete savedTimelines[key];
-        localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
-        updateSavedPlansList();
-      }
-    }
-
-    // Function to show help modal
-    function showHelp() {
-      const modal = document.getElementById('helpModal');
-      if (modal) {
-        modal.style.display = 'block';
-      }
-    }
-
-    // Meal Plan Import/Export Functions
-    function exportAllMealPlans() {
-      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
-      const allMealPlans = [];
-      
-      // Extract all saved meal plans
-      Object.values(savedTimelines).forEach(plan => {
-        if (plan.data) {
-          allMealPlans.push(plan.data);
-        }
-      });
-      
-      // Display meal plans in export area
-      const exportArea = document.getElementById('recipe-export-area');
-      if (exportArea) {
-        if (allMealPlans.length === 0) {
-          exportArea.value = '// No meal plans found.\n// Create and save some meal plans first to export them.';
-        } else {
-          exportArea.value = JSON.stringify(allMealPlans, null, 2);
-        }
-      }
-      
-      // Show feedback
-      if (allMealPlans.length === 0) {
-        showNotification('No meal plans found. Create and save some meal plans first.', 'info');
-      } else {
-        showNotification(`Successfully exported ${allMealPlans.length} meal plan(s).`, 'success');
-      }
-    }
-    
-    function importMealPlans() {
-      const importArea = document.getElementById('recipe-import-area');
-      if (!importArea || !importArea.value.trim()) {
-        showNotification('Please paste meal plan JSON data first.', 'info');
-        return;
-      }
-      
-      try {
-        const mealPlans = JSON.parse(importArea.value);
-        if (!Array.isArray(mealPlans)) {
-          showNotification('Invalid format. Expected an array of meal plans.', 'error');
-          return;
-        }
-        
-        // Validate meal plan format
-        const validMealPlans = mealPlans.filter(plan => 
-          plan.title && 
-          Array.isArray(plan.tasks) && 
-          Array.isArray(plan.recipes)
-        );
-        
-        if (validMealPlans.length === 0) {
-          showNotification('No valid meal plans found in the JSON data.', 'error');
-          return;
-        }
-        
-        // Display meal plans for selection
-        displayMealPlanSelection(validMealPlans);
-        
-      } catch (error) {
-        showNotification('Error parsing JSON. Please check the format.', 'error');
-        console.error('JSON parse error:', error);
-      }
-    }
-    
-    function displayMealPlanSelection(mealPlans) {
-      const recipeList = document.getElementById('recipe-list');
-      const importActions = document.getElementById('import-actions');
-      
-      if (!recipeList || !importActions) return;
-      
-      // Create select all container
-      const selectAllContainer = document.createElement('div');
-      selectAllContainer.className = 'select-all-container';
-      selectAllContainer.innerHTML = `
-        <label>
-          <input type="checkbox" id="select-all-meal-plans" checked onchange="toggleAllMealPlans()">
-          Select All Meal Plans
-        </label>
-      `;
-      
-      // Create meal plan items
-      const mealPlanItems = mealPlans.map((plan, index) => `
-        <div class="recipe-item">
-          <input type="checkbox" class="recipe-checkbox" id="meal-plan-${index}" checked>
-          <div class="recipe-info">
-            <div class="recipe-name">${plan.title}</div>
-            <div class="recipe-details">
-              ${plan.tasks.length} tasks • ${plan.recipes.length} recipes
-            </div>
-          </div>
-        </div>
-      `).join('');
-      
-      recipeList.innerHTML = '';
-      recipeList.appendChild(selectAllContainer);
-      recipeList.innerHTML += mealPlanItems;
-      
-      // Show import actions
-      importActions.innerHTML = `
-        <button onclick="confirmImportMealPlans(${JSON.stringify(mealPlans).replace(/"/g, '&quot;')})">
-          Import Selected Meal Plans
-        </button>
-        <button onclick="cancelImport()" class="secondary-button">Cancel</button>
-      `;
-      
-      // Show the recipe selection area
-      document.getElementById('recipe-selection-area').style.display = 'block';
-    }
-    
-    function toggleAllMealPlans() {
-      const selectAll = document.getElementById('select-all-meal-plans');
-      const checkboxes = document.querySelectorAll('.recipe-checkbox');
-      
-      checkboxes.forEach(checkbox => {
-        checkbox.checked = selectAll.checked;
-      });
-    }
-    
-    function confirmImportMealPlans(mealPlans) {
-      const checkboxes = document.querySelectorAll('.recipe-checkbox');
-      const selectedMealPlans = [];
-      
-      checkboxes.forEach((checkbox, index) => {
-        if (checkbox.checked && mealPlans[index]) {
-          selectedMealPlans.push(mealPlans[index]);
-        }
-      });
-      
-      if (selectedMealPlans.length === 0) {
-        showNotification('Please select at least one meal plan to import.', 'info');
-        return;
-      }
-      
-      // Save meal plans to localStorage
-      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
-      
-      // Add new meal plans, avoiding duplicates by title
-      selectedMealPlans.forEach(newMealPlan => {
-        const existingKey = Object.keys(savedTimelines).find(key => 
-          savedTimelines[key].title === newMealPlan.title
-        );
-        
-        if (existingKey) {
-          // Update existing meal plan
-          savedTimelines[existingKey] = {
-            title: newMealPlan.title,
-            data: newMealPlan,
-            timestamp: Date.now()
-          };
-        } else {
-          // Add new meal plan
-          const timelineKey = `timeline_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-          savedTimelines[timelineKey] = {
-            title: newMealPlan.title,
-            data: newMealPlan,
-            timestamp: Date.now()
-          };
-        }
-      });
-      
-      localStorage.setItem('savedTimelines', JSON.stringify(savedTimelines));
-      
-      showNotification(`Successfully imported ${selectedMealPlans.length} meal plan(s)!`, 'success');
-      
-      // Clear the import area and hide selection
-      document.getElementById('recipe-import-area').value = '';
-      document.getElementById('recipe-selection-area').style.display = 'none';
-      document.getElementById('import-actions').innerHTML = '';
-      
-      // Update meal plan status and saved plans list
-      updateMealPlanStatus();
-      updateSavedPlansList();
-    }
-    
-    function cancelImport() {
-      document.getElementById('recipe-import-area').value = '';
-      document.getElementById('recipe-selection-area').style.display = 'none';
-      document.getElementById('import-actions').innerHTML = '';
-    }
-    
-    function updateMealPlanStatus() {
-      const savedTimelines = JSON.parse(localStorage.getItem('savedTimelines')) || {};
-      
-      const statusElement = document.getElementById('recipe-status');
-      if (statusElement) {
-        statusElement.innerHTML = `
-          <strong>Saved Meal Plans:</strong> ${Object.keys(savedTimelines).length} meal plan(s)<br>
-          <small>Note: Imported meal plans are saved to your browser storage and will appear in the Plan tab.</small>
-        `;
-      }
-    }
-    
-    function showNotification(message, type = 'info') {
-      // Remove any existing notifications
-      const existingNotifications = document.querySelectorAll('.notification');
-      existingNotifications.forEach(notification => notification.remove());
-      
-      // Create new notification
-      const notification = document.createElement('div');
-      notification.className = `notification ${type}`;
-      notification.textContent = message;
-      
-      // Add to page
-      document.body.appendChild(notification);
-      
-      // Show notification
-      setTimeout(() => {
-        notification.classList.add('show');
-      }, 10);
-      
-      // Hide notification after 3 seconds
-      setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-          if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-          }
-        }, 300);
-      }, 3000);
-    }
-    
-    // Function to initialize event listeners
-    function initializeEventListeners() {
-      // Help button
-      const helpBtn = document.getElementById('helpBtn');
-      if (helpBtn) {
-        helpBtn.addEventListener('click', showHelp);
-      }
-
-      // Close modal when clicking the X
-      const closeBtn = document.querySelector('.close');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-          const modal = document.getElementById('helpModal');
-          if (modal) {
-            modal.style.display = 'none';
-          }
-        });
-      }
-
-      // Close modal when clicking outside
-      window.addEventListener('click', (event) => {
-        const modal = document.getElementById('helpModal');
-        if (event.target === modal) {
-          modal.style.display = 'none';
-        }
-      });
-
-      // Load default button
-      const loadDefaultBtn = document.getElementById('load-default');
-      if (loadDefaultBtn) {
-        loadDefaultBtn.addEventListener('click', () => {
-          const defaultData = {
-            title: "Default Dinner Plan",
-            tasks: [
-              {
-                time: "4:00 PM",
-                task: "Start preheating oven to 350°F",
-                recipe: {
-                  name: "Roast Chicken",
-                  ingredients: [
-                    "1 whole chicken (4-5 lbs)",
-                    "2 Tbsp olive oil",
-                    "2 tsp kosher salt",
-                    "1 tsp black pepper",
-                    "3 cloves garlic, crushed",
-                    "1 lemon, quartered"
-                  ],
-                  steps: [
-                    "Preheat oven to 350°F",
-                    "Rub chicken with olive oil, salt, and pepper",
-                    "Place garlic and lemon inside cavity",
-                    "Roast for 1 hour 15 minutes, until internal temperature reaches 165°F",
-                    "Let rest for 15 minutes before carving"
-                  ]
-                }
-              },
-              {
-                time: "4:15 PM",
-                task: "Prepare vegetables",
-                recipe: {
-                  name: "Roasted Vegetables",
-                  ingredients: [
-                    "2 lbs mixed vegetables (potatoes, carrots, onions)",
-                    "2 Tbsp olive oil",
-                    "1 tsp salt",
-                    "1/2 tsp black pepper",
-                    "2 sprigs fresh rosemary"
-                  ],
-                  steps: [
-                    "Cut vegetables into similar-sized pieces",
-                    "Toss with olive oil, salt, and pepper",
-                    "Add rosemary sprigs",
-                    "Roast for 45 minutes, stirring occasionally"
-                  ]
-                }
-              },
-              {
-                time: "5:30 PM",
-                task: "Check chicken temperature and let rest"
-              },
-              {
-                time: "5:45 PM",
-                task: "Carve chicken and serve with vegetables"
-              }
-            ]
-          };
-          processData(defaultData);
-        });
-      }
-
-      // Clear data button
-      const clearDataBtn = document.getElementById('clear-all-data');
-      if (clearDataBtn) {
-        clearDataBtn.addEventListener('click', () => {
-          if (confirm('Are you sure you want to clear all saved data?')) {
-            localStorage.clear();
-            location.reload();
-          }
-        });
-      }
-
-      // File input
-      const fileInput = document.getElementById('fileInput');
-      if (fileInput) {
-        fileInput.addEventListener('change', handleFileSelect);
-      }
-    }
-
-    // Function to handle file selection
-    function handleFileSelect(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            const data = JSON.parse(e.target.result);
-            processData(data);
-          } catch (error) {
-            alert('Error parsing JSON file. Please check the format.');
-            console.error('JSON parse error:', error);
-          }
-        };
-        reader.readAsText(file);
-      }
-    }
-
-    // Function to handle JSON input
-    function handleJsonInput() {
-      const jsonInput = document.getElementById('jsonInput');
-      if (!jsonInput || !jsonInput.value) return;
-
-      
-      try {
-        const data = JSON.parse(jsonInput.value);
-        processData(data);
-        // Clear the textarea after successful load
-        jsonInput.value = '';
-      } catch (error) {
-        alert('Error parsing JSON. Please check the format.');
-        console.error('JSON parse error:', error);
-      }
-    }
-
-    // Initialize event listeners when the DOM is loaded
-    document.addEventListener('DOMContentLoaded', () => {
-      initializeEventListeners();
-      updateSavedPlansList();
-      
-      // Load saved meal plan if it exists
-      const savedPlan = localStorage.getItem('currentMealPlan');
-      if (savedPlan) {
-        try {
-          const data = JSON.parse(savedPlan);
-          processData(data, false);
-        } catch (error) {
-          console.error('Error loading saved plan:', error);
-        }
-      }
-    });
-
-    function switchTab(tabName) {
-      // Hide all tab contents
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      // Deactivate all tabs
-      document.querySelectorAll('.main-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      // Show selected tab content
-      document.getElementById(`${tabName}-tab`).classList.add('active');
-      
-      // Activate selected tab
-      document.querySelector(`.main-tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
-      
-      // Update meal plan status when showing bulk tabs
-      if (tabName === 'bulk-export' || tabName === 'bulk-import') {
-        updateMealPlanStatus();
-      }
-    }
-  </script>
 </head>
 <body>
-  <div class="main-tabs">
-    <button class="main-tab active" onclick="switchTab('about')">About</button>
-    <button class="main-tab" onclick="switchTab('plan')">Plan</button>
-    <button class="main-tab" onclick="switchTab('cook')">Cook</button>
-    <button class="main-tab" onclick="switchTab('bulk-export')">Bulk Export</button>
-    <button class="main-tab" onclick="switchTab('bulk-import')">Bulk Import</button>
-  </div>
+<div class="main-tabs">
+  <button class="main-tab active" onclick="switchTab('about')">About</button>
+  <button class="main-tab" onclick="switchTab('plan')">Plan</button>
+  <button class="main-tab" onclick="switchTab('cook')">Cook</button>
+  <button class="main-tab" onclick="switchTab('bulk-export')">Bulk Export</button>
+  <button class="main-tab" onclick="switchTab('bulk-import')">Bulk Import</button>
+</div>
 
-  <div id="about-tab" class="tab-content active">
-    <div class="about-section">
-      <h1>Welcome to Mealstorm!</h1>
-      
-      <div class="about-section-content">
-        <h2>What is Mealstorm?</h2>
-        <p>Mealstorm is a cooking companion that helps you organize and execute multi-recipe meals. It breaks down complex cooking tasks into a clear timeline, making it easier to coordinate multiple dishes and serve everything at the perfect time.</p>
-      </div>
+<!-- ── About Tab ── -->
+<div id="about-tab" class="tab-content active">
+  <div class="about-section">
+    <h1>Welcome to Mealstorm!</h1>
 
-      <div class="about-section-content">
-        <h2>Getting Started</h2>
-        <ol>
-          <li>Head to the <strong>Plan</strong> tab to create your meal plan</li>
-          <li>You can either:
-            <ul>
-              <li>Upload a JSON file with your meal plan</li>
-              <li>Paste your meal plan JSON directly</li>
-              <li>Use our <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank">Mealstorm Buddy</a> to generate a meal plan</li>
-            </ul>
-          </li>
-          <li>Switch to the <strong>Cook</strong> tab to see your interactive cooking timeline</li>
-        </ol>
-      </div>
+    <div class="about-section-content">
+      <h2>What is Mealstorm?</h2>
+      <p>Mealstorm is a cooking companion that helps you organize and execute multi-recipe meals. It breaks down complex cooking tasks into a clear timeline, making it easier to coordinate multiple dishes and serve everything at the perfect time.</p>
+    </div>
 
-      <div class="about-section-content">
-        <h2>Need Help Creating a Plan?</h2>
-        <p>Try our <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank">Mealstorm Buddy</a> - a custom ChatGPT assistant that helps you create meal plans in the correct format!</p>
-      </div>
+    <div class="about-section-content">
+      <h2>Getting Started</h2>
+      <ol>
+        <li>Head to the <strong>Plan</strong> tab to create your meal plan</li>
+        <li>You can either:
+          <ul>
+            <li>Upload a JSON file with your meal plan</li>
+            <li>Paste your meal plan JSON directly</li>
+            <li>Use our <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank">Mealstorm Buddy</a> to generate a meal plan</li>
+          </ul>
+        </li>
+        <li>Switch to the <strong>Cook</strong> tab to see your interactive cooking timeline</li>
+      </ol>
+    </div>
 
-      <div class="about-section-content">
-        <h2>JSON Format Guide</h2>
-        <p>Your meal plan should follow this structure:</p>
-        <div class="json-format">
+    <div class="about-section-content">
+      <h2>Need Help Creating a Plan?</h2>
+      <p>Try our <a href="https://chatgpt.com/g/g-682cdfd61f0c8191ad1c063a4c46efef-mealstorm-buddy" target="_blank">Mealstorm Buddy</a> — a custom ChatGPT assistant that helps you create meal plans in the correct format!</p>
+    </div>
+
+    <div class="about-section-content">
+      <h2>JSON Format Guide</h2>
+      <p>Your meal plan should follow this structure:</p>
+      <div class="json-format">
           <pre><code>{
-
   "title": "Your Meal Plan Title",
   "tasks": [
     { "time": "4:30pm", "text": "Preheat oven to 450°F" },
@@ -1472,106 +494,104 @@
     }
   ]
 }</code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Plan Tab ── -->
+<div id="plan-tab" class="tab-content">
+  <div class="plan-section">
+    <h2>Create a New Meal Plan</h2>
+    <p>Upload a JSON file or paste your meal plan. Need help with the format? Check the <strong>About</strong> tab for details.</p>
+
+    <div class="upload-container">
+      <div class="upload-options">
+        <div class="file-upload">
+          <input type="file" id="fileInput" accept=".json">
+          <button onclick="document.getElementById('fileInput').click()" class="upload-btn">Upload JSON File</button>
+        </div>
+        <div class="paste-upload">
+          <textarea id="jsonInput" placeholder="Paste your JSON here..." rows="10"></textarea>
+          <button onclick="handleJsonInput()">Load Plan</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="plan-tab" class="tab-content">
-    <div class="plan-section">
-      <h2>Create a New Meal Plan</h2>
-      <p>Upload a JSON file or paste your meal plan. Need help with the format? Check the <strong>About</strong> tab for details.</p>
-      
-      <div class="upload-container">
-        <div class="upload-options">
-          <div class="file-upload">
-            <input type="file" id="fileInput" accept=".json" onchange="handleFileSelect(event)" style="display: none;">
-            <button onclick="document.getElementById('fileInput').click()" class="upload-btn">Upload JSON File</button>
-          </div>
-          <div class="paste-upload">
-            <textarea id="jsonInput" placeholder="Paste your JSON here..." rows="10" style="width: 100%;"></textarea>
-            <button onclick="handleJsonInput()">Load Plan</button>
-          </div>
-        </div>
-      </div>
+  <div class="saved-plans">
+    <h2>Saved Plans</h2>
+    <div id="saved-plans-container"></div>
+  </div>
+</div>
+
+<!-- ── Cook Tab ── -->
+<div id="cook-tab" class="tab-content">
+  <div class="cook-header">
+    <h1 id="title">Mealstorm</h1>
+    <button id="noSleepBtn" class="no-sleep-btn" onclick="toggleNoSleep()">
+      <span class="icon">🔒</span> Keep Screen On
+    </button>
+  </div>
+  <div id="recipe-container" class="recipe-container">
+    <!-- Populated by processData() -->
+    <div class="recipe-tabs"></div>
+    <div class="recipe-content"></div>
+  </div>
+</div>
+
+<!-- ── Bulk Export Tab ── -->
+<div id="bulk-export-tab" class="tab-content">
+  <div class="import-export-container">
+    <h1>Bulk Export Meal Plans</h1>
+    <p>Export all your saved meal plans as JSON for backup or sharing.</p>
+
+    <div class="about-section-content">
+      <h3>Current Meal Plan Status</h3>
+      <p id="recipe-status">Loading...</p>
     </div>
 
-    <div class="saved-plans">
-      <h2>Saved Plans</h2>
-      <div id="saved-plans-container"></div>
+    <div class="export-section">
+      <h3>Export All Meal Plans</h3>
+      <p>Exports all saved meal plans, including their tasks and recipes.</p>
+      <button onclick="exportAllMealPlans()">Export Meal Plans</button>
+      <textarea id="recipe-export-area" class="json-textarea" placeholder="Click 'Export Meal Plans' to see your meal plans here..." readonly></textarea>
+    </div>
+
+    <div class="about-section-content">
+      <h3>Export Instructions</h3>
+      <ol>
+        <li>Click the "Export Meal Plans" button above</li>
+        <li>Copy the JSON data from the text area</li>
+        <li>Save it to a file or share it with others</li>
+        <li>Use the "Bulk Import" tab to import these meal plans on another device</li>
+      </ol>
     </div>
   </div>
+</div>
 
-  <div id="cook-tab" class="tab-content">
-    <div class="cook-header">
-      <h1 id="title">Mealstorm</h1>
-      <button id="noSleepBtn" class="no-sleep-btn" onclick="toggleNoSleep()">
-        <span class="icon">🔒</span> Keep Screen On
-      </button>
-    </div>
-    <div id="recipe-container" class="recipe-container">
-      <div class="recipe-tabs" id="recipe-tabs"></div>
-      <div class="recipe-content" id="recipe-content"></div>
-    </div>
-  </div>
+<!-- ── Bulk Import Tab ── -->
+<div id="bulk-import-tab" class="tab-content">
+  <div class="import-export-container">
+    <h1>Bulk Import Meal Plans</h1>
+    <p>Import meal plans from JSON data.</p>
 
-  <div id="bulk-export-tab" class="tab-content">
-    <div class="import-export-container">
-      <h1>Bulk Export Meal Plans</h1>
-      <p>Export all your saved meal plans as JSON for backup or sharing.</p>
-      
-      <!-- Current Meal Plan Status -->
-      <div class="about-section-content">
-        <h3>Current Meal Plan Status</h3>
-        <p id="recipe-status">Loading...</p>
-      </div>
-      
-      <!-- Export Section -->
-      <div class="export-section">
-        <h3>Export All Meal Plans</h3>
-        <p>Export all your saved meal plans as JSON. This will include all meal plans with their tasks and recipes.</p>
-        <button onclick="exportAllMealPlans()">Export Meal Plans</button>
-        <textarea id="recipe-export-area" class="recipe-export-area" placeholder="Click 'Export Meal Plans' to see your meal plans here..." readonly></textarea>
-      </div>
-      
-      <!-- Export Instructions -->
-      <div class="about-section-content">
-        <h3>Export Instructions</h3>
-        <ol>
-          <li>Click the "Export Meal Plans" button above</li>
-          <li>Copy the JSON data from the text area</li>
-          <li>Save it to a file or share it with others</li>
-          <li>Use the "Bulk Import" tab to import these meal plans on another device</li>
-        </ol>
+    <div class="import-section">
+      <h3>Import Meal Plans</h3>
+      <p>Paste a JSON array of meal plans. Each plan needs a <code>title</code>, <code>tasks</code> array, and <code>recipes</code> array.</p>
+      <textarea id="recipe-import-area" class="json-textarea" placeholder="Paste your meal plan JSON array here..."></textarea>
+      <button onclick="importMealPlans()">Import Meal Plans</button>
+
+      <div id="recipe-selection-area" style="display: none;">
+        <h4>Select Meal Plans to Import:</h4>
+        <div id="recipe-list" class="recipe-list"></div>
+        <div id="import-actions" class="import-actions"></div>
       </div>
     </div>
-  </div>
 
-  <div id="bulk-import-tab" class="tab-content">
-    <div class="import-export-container">
-      <h1>Bulk Import Meal Plans</h1>
-      <p>Import meal plans from JSON data or files.</p>
-      
-      <!-- Import Section -->
-      <div class="import-section">
-        <h3>Import Meal Plans</h3>
-        <p>Paste a JSON array of meal plans to import them into your browser storage. Each meal plan should have a title, tasks array, and recipes array.</p>
-        <textarea id="recipe-import-area" class="recipe-import-area" placeholder="Paste your meal plan JSON array here..."></textarea>
-        <button onclick="importMealPlans()">Import Meal Plans</button>
-        
-        <!-- Meal Plan Selection Area (hidden by default) -->
-        <div id="recipe-selection-area" style="display: none;">
-          <h4>Select Meal Plans to Import:</h4>
-          <div id="recipe-list" class="recipe-list"></div>
-          <div id="import-actions" class="import-actions"></div>
-        </div>
-      </div>
-      
-      <!-- Meal Plan Format Guide -->
-      <div class="about-section-content">
-        <h3>Meal Plan Format</h3>
-        <p>Meal plans should be in this format:</p>
-        <div class="json-format">
+    <div class="about-section-content">
+      <h3>Meal Plan Format</h3>
+      <div class="json-format">
           <pre><code>[
   {
     "title": "Dinner Party",
@@ -1582,35 +602,745 @@
     "recipes": [
       {
         "name": "Recipe Name",
-        "ingredients": [
-          "2 Tbsp olive oil",
-          "1 cup diced onion",
-          "2 cloves garlic"
-        ],
-        "instructions": [
-          "Step 1: Heat oil in pan",
-          "Step 2: Add onions and cook until soft",
-          "Step 3: Add garlic and cook 30 seconds"
-        ]
+        "ingredients": ["2 Tbsp olive oil", "1 cup diced onion"],
+        "instructions": ["Step 1: Heat oil in pan", "Step 2: Add onions"]
       }
     ]
   }
 ]</code></pre>
-        </div>
-      </div>
-      
-      <!-- Import Instructions -->
-      <div class="about-section-content">
-        <h3>Import Instructions</h3>
-        <ol>
-          <li>Paste your meal plan JSON data into the text area above</li>
-          <li>Click "Import Meal Plans" to validate the data</li>
-          <li>Select which meal plans you want to import (all selected by default)</li>
-          <li>Click "Import Selected Meal Plans" to complete the import</li>
-          <li>Imported meal plans will appear in the "Plan" tab</li>
-        </ol>
       </div>
     </div>
+
+    <div class="about-section-content">
+      <h3>Import Instructions</h3>
+      <ol>
+        <li>Paste your meal plan JSON data into the text area above</li>
+        <li>Click "Import Meal Plans" to validate the data</li>
+        <li>Select which meal plans you want to import (all selected by default)</li>
+        <li>Click "Import Selected Meal Plans" to complete the import</li>
+        <li>Imported meal plans will appear in the "Plan" tab</li>
+      </ol>
+    </div>
   </div>
+</div>
+
+<script>
+  // ─────────────────────────────────────────────
+  // State
+  // ─────────────────────────────────────────────
+  let noSleep;
+  try {
+    noSleep = new NoSleep();
+  } catch (e) {
+    console.warn('NoSleep.js not available:', e);
+    noSleep = { enable: () => Promise.resolve(), disable: () => {} };
+  }
+
+  let isNoSleepEnabled = false;
+  let originalTasks = null;         // Stores original task times for shifting
+  let pendingImportPlans = [];      // Holds plans awaiting user confirmation on import
+
+  // ─────────────────────────────────────────────
+  // Utility helpers
+  // ─────────────────────────────────────────────
+
+  /** Safely escape a string for insertion into innerHTML */
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  /** Convert a 12-hr or 24-hr time string to "HH:mm" (24-hr). Returns '' on failure. */
+  function to24Hour(timeStr) {
+    if (!timeStr) return '';
+
+    // Already 24-hr format
+    if (timeStr.match(/^\d{1,2}:\d{2}$/)) {
+      const [h, m] = timeStr.split(':').map(Number);
+      if (h >= 0 && h <= 23 && m >= 0 && m <= 59)
+        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    }
+
+    // 12-hr format e.g. "4:00 PM", "4pm", "4:00pm"
+    const match = timeStr.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)/i);
+    if (match) {
+      let [, h, m, period] = match;
+      h = parseInt(h);
+      m = m ? parseInt(m) : 0;
+      if (h < 1 || h > 12 || m < 0 || m > 59) return '';
+      if (period.toLowerCase() === 'pm' && h !== 12) h += 12;
+      else if (period.toLowerCase() === 'am' && h === 12) h = 0;
+      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    }
+
+    return '';
+  }
+
+  /** Convert a "HH:mm" string to a display "H:MM AM/PM" string. Returns '' on failure. */
+  function to12Hour(timeStr) {
+    if (!timeStr) return '';
+    if (timeStr.match(/\d{1,2}:\d{2}\s*(am|pm)/i)) return timeStr;
+
+    const [h, m] = timeStr.split(':').map(Number);
+    if (isNaN(h) || isNaN(m) || h < 0 || h > 23 || m < 0 || m > 59) return '';
+    const period = h >= 12 ? 'PM' : 'AM';
+    const displayH = h % 12 || 12;
+    return `${displayH}:${m.toString().padStart(2, '0')} ${period}`;
+  }
+
+  /** Convert "HH:mm" to total minutes since midnight. */
+  function timeToMinutes(timeStr) {
+    if (!timeStr) return 0;
+    const [h, m] = timeStr.split(':').map(Number);
+    if (isNaN(h) || isNaN(m)) return 0;
+    return h * 60 + m;
+  }
+
+  /** Convert total minutes since midnight to "HH:mm". */
+  function minutesToTime(minutes) {
+    if (typeof minutes !== 'number' || isNaN(minutes) || minutes < 0 || minutes >= 24 * 60) return '';
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+  }
+
+  // ─────────────────────────────────────────────
+  // NoSleep
+  // ─────────────────────────────────────────────
+
+  /**
+   * FIX: Previously broken — used noSleep as a flag (setting it to null on disable)
+   * and never used the isNoSleepEnabled variable. Now uses isNoSleepEnabled correctly.
+   */
+  async function toggleNoSleep() {
+    const btn = document.getElementById('noSleepBtn');
+    if (!btn) return;
+
+    if (!isNoSleepEnabled) {
+      try {
+        await noSleep.enable();
+        isNoSleepEnabled = true;
+        btn.classList.add('active');
+        btn.innerHTML = '<span class="icon">🔓</span> Screen On';
+      } catch (e) {
+        console.warn('Could not enable NoSleep:', e);
+        showNotification('Could not keep screen on. Tap the page first and try again.', 'warning');
+      }
+    } else {
+      noSleep.disable();
+      isNoSleepEnabled = false;
+      btn.classList.remove('active');
+      btn.innerHTML = '<span class="icon">🔒</span> Keep Screen On';
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // Tab switching
+  // ─────────────────────────────────────────────
+
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+
+    document.getElementById(`${tabName}-tab`).classList.add('active');
+    document.querySelector(`.main-tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+
+    if (tabName === 'bulk-export' || tabName === 'bulk-import') {
+      updateMealPlanStatus();
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // Recipe section tabs (within Cook)
+  // ─────────────────────────────────────────────
+
+  function showRecipeSection(sectionId) {
+    document.querySelectorAll('.recipe-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.recipe-tab').forEach(t => {
+      t.classList.toggle('active', t.getAttribute('data-section') === sectionId);
+    });
+    const section = document.getElementById(sectionId);
+    if (section) section.classList.add('active');
+  }
+
+  // ─────────────────────────────────────────────
+  // Checkbox state persistence
+  // ─────────────────────────────────────────────
+
+  /**
+   * FIX: This function was referenced in the template but never defined.
+   * Now saves checkbox state to localStorage so progress survives tab switches and reloads.
+   */
+  function updateTaskStatus(index) {
+    const checkbox = document.getElementById(`task${index}`);
+    if (!checkbox) return;
+    const state = JSON.parse(localStorage.getItem('taskCheckState') || '{}');
+    state[index] = checkbox.checked;
+    localStorage.setItem('taskCheckState', JSON.stringify(state));
+  }
+
+  /** Restore saved checkbox state after the checklist has been rendered. */
+  function restoreCheckboxState() {
+    const state = JSON.parse(localStorage.getItem('taskCheckState') || '{}');
+    Object.entries(state).forEach(([index, checked]) => {
+      const checkbox = document.getElementById(`task${index}`);
+      if (checkbox) checkbox.checked = checked;
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // Core data processing
+  // ─────────────────────────────────────────────
+
+  /**
+   * Render a meal plan into the Cook tab.
+   * FIX: Normalises task field names (supports both `text` and `task` keys).
+   * FIX: Restores checkbox state after rendering.
+   * FIX: Clears stale checkbox state when a *different* plan is loaded.
+   */
+  function processData(data, savePlan = true) {
+    if (!data || !data.tasks) {
+      console.error('Invalid data format: missing tasks');
+      return;
+    }
+
+    // Normalise task text field: support both `text` and `task` keys
+    data.tasks = data.tasks.map(t => ({
+      ...t,
+      text: t.text || t.task || ''
+    }));
+
+    // Update page title
+    const titleEl = document.getElementById('title');
+    if (titleEl) titleEl.textContent = data.title || 'Mealstorm';
+
+    originalTasks = [...data.tasks];
+
+    // Set target-time input to the last task's time
+    const timeInput = document.getElementById('target-time');
+    if (timeInput && data.tasks.length > 0) {
+      const lastTask = data.tasks[data.tasks.length - 1];
+      const t24 = to24Hour(lastTask.time);
+      if (t24) timeInput.value = t24;
+    }
+
+    // Build recipe tabs sidebar
+    const tabsContainer = document.querySelector('.recipe-tabs');
+    tabsContainer.innerHTML = '';
+    const stepsTab = document.createElement('div');
+    stepsTab.className = 'recipe-tab active';
+    stepsTab.setAttribute('data-section', 'steps-section');
+    stepsTab.textContent = 'Timeline Steps';
+    stepsTab.onclick = () => showRecipeSection('steps-section');
+    tabsContainer.appendChild(stepsTab);
+
+    // Build main content area
+    const contentContainer = document.querySelector('.recipe-content');
+    contentContainer.innerHTML = `
+        <div id="steps-section" class="recipe-section active">
+          <div class="time-shift-container">
+            <label for="target-time">Target Time:</label>
+            <input type="time" id="target-time" step="60">
+            <button onclick="shiftTimes()">Adjust Timeline</button>
+          </div>
+          <div id="checklist"></div>
+        </div>
+      `;
+
+    // Re-read the time input value and set it (it was wiped by innerHTML replacement)
+    if (timeInput && data.tasks.length > 0) {
+      const newTimeInput = document.getElementById('target-time');
+      const lastTask = data.tasks[data.tasks.length - 1];
+      const t24 = to24Hour(lastTask.time);
+      if (newTimeInput && t24) newTimeInput.value = t24;
+    }
+
+    const list = document.getElementById('checklist');
+    if (!list) return;
+
+    // Render task checklist
+    data.tasks.forEach((task, index) => {
+      const item = document.createElement('div');
+      item.className = 'checklist-item';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = `task${index}`;
+      checkbox.onchange = () => updateTaskStatus(index);
+
+      const label = document.createElement('label');
+      label.htmlFor = `task${index}`;
+
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'time';
+      timeSpan.textContent = task.time;
+
+      const taskSpan = document.createElement('span');
+      taskSpan.className = 'task';
+      taskSpan.textContent = task.text;   // safe: textContent, not innerHTML
+
+      label.appendChild(timeSpan);
+      label.appendChild(taskSpan);
+      item.appendChild(checkbox);
+      item.appendChild(label);
+      list.appendChild(item);
+    });
+
+    // Render recipe tabs and sections
+    if (Array.isArray(data.recipes)) {
+      data.recipes.forEach((recipe, index) => {
+        const tabId = `recipe-${index}`;
+
+        const tab = document.createElement('div');
+        tab.className = 'recipe-tab';
+        tab.textContent = recipe.name;    // safe: textContent
+        tab.setAttribute('data-section', tabId);
+        tab.onclick = () => showRecipeSection(tabId);
+        tabsContainer.appendChild(tab);
+
+        const section = document.createElement('div');
+        section.id = tabId;
+        section.className = 'recipe-section';
+
+        const nameH3 = document.createElement('h3');
+        nameH3.textContent = recipe.name;
+
+        const ingH4 = document.createElement('h4');
+        ingH4.textContent = 'Ingredients:';
+        const ingUl = document.createElement('ul');
+        (recipe.ingredients || []).forEach(ing => {
+          const li = document.createElement('li');
+          li.textContent = ing;
+          ingUl.appendChild(li);
+        });
+
+        const stepsH4 = document.createElement('h4');
+        stepsH4.textContent = 'Steps:';
+        const stepsOl = document.createElement('ol');
+        (recipe.instructions || []).forEach(step => {
+          const li = document.createElement('li');
+          li.textContent = step;
+          stepsOl.appendChild(li);
+        });
+
+        section.appendChild(nameH3);
+        section.appendChild(ingH4);
+        section.appendChild(ingUl);
+        section.appendChild(stepsH4);
+        section.appendChild(stepsOl);
+        contentContainer.appendChild(section);
+      });
+    }
+
+    // Restore checkbox state
+    restoreCheckboxState();
+
+    if (savePlan) {
+      localStorage.setItem('currentMealPlan', JSON.stringify(data));
+      saveTimelineToStorage(data);
+      updateSavedPlansList();
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // Timeline shifting
+  // ─────────────────────────────────────────────
+
+  function shiftTimes() {
+    const timeInput = document.getElementById('target-time');
+    if (!timeInput || !timeInput.value || !originalTasks) return;
+
+    const newTargetMinutes = timeToMinutes(timeInput.value);
+    const originalTargetMinutes = timeToMinutes(to24Hour(originalTasks[originalTasks.length - 1].time));
+    const diff = newTargetMinutes - originalTargetMinutes;
+
+    const items = document.getElementById('checklist').getElementsByClassName('checklist-item');
+    originalTasks.forEach((task, index) => {
+      if (index < items.length) {
+        const timeSpan = items[index].querySelector('.time');
+        if (timeSpan) {
+          const shifted = minutesToTime(timeToMinutes(to24Hour(task.time)) + diff);
+          timeSpan.textContent = to12Hour(shifted);
+        }
+      }
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // localStorage helpers
+  // ─────────────────────────────────────────────
+
+  function getSavedTimelines() {
+    try {
+      return JSON.parse(localStorage.getItem('savedTimelines')) || {};
+    } catch (e) {
+      console.error('Could not read savedTimelines:', e);
+      return {};
+    }
+  }
+
+  function setSavedTimelines(data) {
+    localStorage.setItem('savedTimelines', JSON.stringify(data));
+  }
+
+  /** Save (or update) a plan. Uses title to deduplicate. */
+  function saveTimelineToStorage(data) {
+    const saved = getSavedTimelines();
+    const existingKey = Object.keys(saved).find(k => saved[k].title === data.title);
+
+    if (existingKey) {
+      saved[existingKey] = { title: data.title, data, timestamp: Date.now() };
+    } else {
+      // FIX: append random suffix so rapid saves don't collide on the same ms
+      const key = `timeline_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      saved[key] = { title: data.title, data, timestamp: Date.now() };
+    }
+
+    setSavedTimelines(saved);
+    updateSavedPlansList();
+  }
+
+  // ─────────────────────────────────────────────
+  // Saved plans UI
+  // ─────────────────────────────────────────────
+
+  function updateSavedPlansList() {
+    const saved = getSavedTimelines();
+    const container = document.getElementById('saved-plans-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (Object.keys(saved).length === 0) {
+      container.innerHTML = '<p>No saved meal plans yet.</p>';
+      return;
+    }
+
+    const sortedKeys = Object.keys(saved).sort((a, b) => saved[b].timestamp - saved[a].timestamp);
+
+    sortedKeys.forEach(key => {
+      const plan = saved[key];
+      const el = document.createElement('div');
+      el.className = 'plan-item';
+
+      // FIX: Use textContent for plan title to prevent XSS
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'plan-title';
+      titleDiv.textContent = plan.title;
+
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'plan-actions';
+
+      const loadBtn = document.createElement('button');
+      loadBtn.textContent = 'Load';
+      loadBtn.onclick = () => loadSavedPlan(key);
+
+      const editBtn = document.createElement('button');
+      editBtn.textContent = 'Edit';
+      editBtn.className = 'secondary-button';
+      editBtn.onclick = () => editSavedPlan(key);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.className = 'warning-button';
+      deleteBtn.onclick = () => deleteSavedPlan(key);
+
+      actionsDiv.append(loadBtn, editBtn, deleteBtn);
+      el.append(titleDiv, actionsDiv);
+      container.appendChild(el);
+    });
+  }
+
+  function loadSavedPlan(key) {
+    const plan = getSavedTimelines()[key];
+    if (plan && plan.data) {
+      // Clear old checkbox state when loading a different plan
+      localStorage.removeItem('taskCheckState');
+      processData(plan.data);
+      switchTab('cook');
+    }
+  }
+
+  function editSavedPlan(key) {
+    const plan = getSavedTimelines()[key];
+    if (plan && plan.data) {
+      switchTab('plan');
+      const jsonInput = document.getElementById('jsonInput');
+      if (jsonInput) {
+        jsonInput.value = JSON.stringify(plan.data, null, 2);
+        jsonInput.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
+
+  function deleteSavedPlan(key) {
+    if (!confirm('Are you sure you want to delete this saved plan?')) return;
+    const saved = getSavedTimelines();
+    delete saved[key];
+    setSavedTimelines(saved);
+    updateSavedPlansList();
+  }
+
+  // ─────────────────────────────────────────────
+  // Import / Export
+  // ─────────────────────────────────────────────
+
+  function exportAllMealPlans() {
+    const saved = getSavedTimelines();
+    const plans = Object.values(saved).filter(p => p.data).map(p => p.data);
+
+    const exportArea = document.getElementById('recipe-export-area');
+    if (exportArea) {
+      exportArea.value = plans.length
+          ? JSON.stringify(plans, null, 2)
+          : '// No meal plans found.\n// Create and save some meal plans first.';
+    }
+
+    showNotification(
+        plans.length
+            ? `Successfully exported ${plans.length} meal plan(s).`
+            : 'No meal plans found. Create and save some first.',
+        plans.length ? 'success' : 'info'
+    );
+  }
+
+  function importMealPlans() {
+    const importArea = document.getElementById('recipe-import-area');
+    if (!importArea || !importArea.value.trim()) {
+      showNotification('Please paste meal plan JSON data first.', 'info');
+      return;
+    }
+
+    let parsed;
+    try {
+      parsed = JSON.parse(importArea.value);
+    } catch (e) {
+      showNotification('Error parsing JSON. Please check the format.', 'error');
+      console.error('JSON parse error:', e);
+      return;
+    }
+
+    if (!Array.isArray(parsed)) {
+      showNotification('Invalid format. Expected an array of meal plans.', 'error');
+      return;
+    }
+
+    const valid = parsed.filter(p => p.title && Array.isArray(p.tasks) && Array.isArray(p.recipes));
+    if (valid.length === 0) {
+      showNotification('No valid meal plans found in the JSON data.', 'error');
+      return;
+    }
+
+    displayMealPlanSelection(valid);
+  }
+
+  /**
+   * FIX: Previously passed the full mealPlans array as an escaped JSON string inside
+   * an onclick attribute, which broke on titles with quotes/special characters.
+   * Now stores plans in the module-level `pendingImportPlans` variable instead.
+   */
+  function displayMealPlanSelection(mealPlans) {
+    pendingImportPlans = mealPlans;
+
+    const recipeList = document.getElementById('recipe-list');
+    const importActions = document.getElementById('import-actions');
+    if (!recipeList || !importActions) return;
+
+    // Build list using DOM methods to avoid XSS and innerHTML += pitfall
+    recipeList.innerHTML = '';
+
+    // Select-all header
+    const selectAllDiv = document.createElement('div');
+    selectAllDiv.className = 'select-all-container';
+    const selectAllLabel = document.createElement('label');
+    const selectAllCb = document.createElement('input');
+    selectAllCb.type = 'checkbox';
+    selectAllCb.id = 'select-all-meal-plans';
+    selectAllCb.checked = true;
+    selectAllCb.onchange = toggleAllMealPlans;
+    selectAllLabel.append(selectAllCb, ' Select All Meal Plans');
+    selectAllDiv.appendChild(selectAllLabel);
+    recipeList.appendChild(selectAllDiv);
+
+    // Individual plan rows
+    mealPlans.forEach((plan, index) => {
+      const row = document.createElement('div');
+      row.className = 'recipe-item';
+
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.className = 'recipe-checkbox';
+      cb.id = `meal-plan-${index}`;
+      cb.checked = true;
+
+      const info = document.createElement('div');
+      info.className = 'recipe-info';
+
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'recipe-name';
+      nameDiv.textContent = plan.title;   // safe textContent
+
+      const detailDiv = document.createElement('div');
+      detailDiv.className = 'recipe-details';
+      detailDiv.textContent = `${plan.tasks.length} tasks • ${plan.recipes.length} recipes`;
+
+      info.append(nameDiv, detailDiv);
+      row.append(cb, info);
+      recipeList.appendChild(row);
+    });
+
+    // Action buttons
+    importActions.innerHTML = '';
+    const confirmBtn = document.createElement('button');
+    confirmBtn.textContent = 'Import Selected Meal Plans';
+    confirmBtn.onclick = confirmImportMealPlans;
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.className = 'secondary-button';
+    cancelBtn.onclick = cancelImport;
+
+    importActions.append(confirmBtn, cancelBtn);
+
+    document.getElementById('recipe-selection-area').style.display = 'block';
+  }
+
+  function toggleAllMealPlans() {
+    const checked = document.getElementById('select-all-meal-plans').checked;
+    document.querySelectorAll('.recipe-checkbox').forEach(cb => { cb.checked = checked; });
+  }
+
+  function confirmImportMealPlans() {
+    const checkboxes = document.querySelectorAll('.recipe-checkbox');
+    const selected = pendingImportPlans.filter((_, i) => checkboxes[i] && checkboxes[i].checked);
+
+    if (selected.length === 0) {
+      showNotification('Please select at least one meal plan to import.', 'info');
+      return;
+    }
+
+    const saved = getSavedTimelines();
+    selected.forEach(plan => {
+      const existingKey = Object.keys(saved).find(k => saved[k].title === plan.title);
+      if (existingKey) {
+        saved[existingKey] = { title: plan.title, data: plan, timestamp: Date.now() };
+      } else {
+        const key = `timeline_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+        saved[key] = { title: plan.title, data: plan, timestamp: Date.now() };
+      }
+    });
+
+    setSavedTimelines(saved);
+    showNotification(`Successfully imported ${selected.length} meal plan(s)!`, 'success');
+
+    document.getElementById('recipe-import-area').value = '';
+    document.getElementById('recipe-selection-area').style.display = 'none';
+    document.getElementById('import-actions').innerHTML = '';
+    pendingImportPlans = [];
+
+    updateMealPlanStatus();
+    updateSavedPlansList();
+  }
+
+  function cancelImport() {
+    document.getElementById('recipe-import-area').value = '';
+    document.getElementById('recipe-selection-area').style.display = 'none';
+    document.getElementById('import-actions').innerHTML = '';
+    pendingImportPlans = [];
+  }
+
+  function updateMealPlanStatus() {
+    const count = Object.keys(getSavedTimelines()).length;
+    const el = document.getElementById('recipe-status');
+    if (el) {
+      el.innerHTML = `<strong>Saved Meal Plans:</strong> ${count} meal plan(s)<br>
+          <small>Imported meal plans are saved to browser storage and appear in the Plan tab.</small>`;
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // Notifications
+  // ─────────────────────────────────────────────
+
+  function showNotification(message, type = 'info') {
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+
+    const n = document.createElement('div');
+    n.className = `notification ${type}`;
+    n.textContent = message;
+    document.body.appendChild(n);
+
+    setTimeout(() => n.classList.add('show'), 10);
+    setTimeout(() => {
+      n.classList.remove('show');
+      setTimeout(() => n.parentNode && n.parentNode.removeChild(n), 300);
+    }, 3000);
+  }
+
+  // ─────────────────────────────────────────────
+  // File / JSON input handlers
+  // ─────────────────────────────────────────────
+
+  function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        processData(JSON.parse(e.target.result));
+      } catch (err) {
+        showNotification('Error parsing JSON file. Please check the format.', 'error');
+        console.error('JSON parse error:', err);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function handleJsonInput() {
+    const jsonInput = document.getElementById('jsonInput');
+    if (!jsonInput || !jsonInput.value.trim()) return;
+    try {
+      processData(JSON.parse(jsonInput.value));
+      jsonInput.value = '';
+    } catch (err) {
+      showNotification('Error parsing JSON. Please check the format.', 'error');
+      console.error('JSON parse error:', err);
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // Initialisation
+  // ─────────────────────────────────────────────
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // File input listener
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) fileInput.addEventListener('change', handleFileSelect);
+
+    // Clear all data button
+    const clearBtn = document.getElementById('clear-all-data');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all saved data?')) {
+          localStorage.clear();
+          location.reload();
+        }
+      });
+    }
+
+    updateSavedPlansList();
+
+    // Restore last active plan on load without re-saving it
+    const savedPlan = localStorage.getItem('currentMealPlan');
+    if (savedPlan) {
+      try {
+        processData(JSON.parse(savedPlan), false);
+      } catch (e) {
+        console.error('Error loading saved plan:', e);
+      }
+    }
+  });
+</script>
 </body>
 </html>
