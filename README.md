@@ -110,6 +110,8 @@ Additional test commands:
 
 The default suite focuses on real user workflows: plan loading, persistence, import/export, error handling, and mobile smoke coverage. The tests run automatically on GitHub Actions for pushes and pull requests to main, master, and feature branches.
 
+For iOS, custom startup images only appear when Mealstorm is installed with "Add to Home Screen" and launched from the Home Screen. Safari tabs do not use `apple-touch-startup-image` splash assets.
+
 ## JSON Format
 
 ### Single Meal Plan
