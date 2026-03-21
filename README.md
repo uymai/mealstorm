@@ -94,19 +94,21 @@ Mealstorm includes powerful bulk import and export capabilities for managing mul
 
 2. Install Playwright browsers:
    ```
-   npx playwright install
+   npm run test:install-browsers
    ```
 
-3. Run the tests:
+3. Run the default regression suite:
    ```
    npm test
    ```
 
 Additional test commands:
+- `npm run test:all` - Run the full configured Playwright project set
+- `npm run test:mobile` - Run the mobile viewport smoke coverage
 - `npm run test:ui` - Run tests with Playwright UI
 - `npm run test:debug` - Run tests in debug mode
 
-The tests run automatically on GitHub Actions for all pushes and pull requests to main branches and feature branches.
+The default suite focuses on real user workflows: plan loading, persistence, import/export, error handling, and mobile smoke coverage. The tests run automatically on GitHub Actions for pushes and pull requests to main, master, and feature branches.
 
 ## JSON Format
 

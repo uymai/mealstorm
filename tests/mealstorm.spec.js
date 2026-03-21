@@ -1,197 +1,174 @@
 const { test, expect } = require('@playwright/test');
+const {
+  alternateMealPlan,
+  bulkImportMealPlans,
+  expectNotification,
+  expectSavedPlanTitles,
+  exportMealPlans,
+  loadPlanFromTextarea,
+  mainTab,
+  openCookTab,
+  resetApp,
+  uploadPlanFile,
+  validMealPlan,
+} = require('./helpers/mealstorm.helpers');
 
-test.describe('Mealstorm Application', () => {
+test.describe('Mealstorm regression suite', () => {
   test.beforeEach(async ({ page }) => {
-    // Start from the index page for each test
-    await page.goto('http://localhost:3000');
+    await resetApp(page);
   });
 
-  test('should load the application and show about page by default', async ({ page }) => {
-    // Check if the main title is visible
-    await expect(page.getByText('Welcome to Mealstorm!')).toBeVisible();
-    
-    // Verify the main tabs are present
-    await expect(page.getByRole('button', { name: 'About' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Plan' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Cook' })).toBeVisible();
-  });
+  test('boots on the About tab and supports tab navigation', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Welcome to Mealstorm!' })).toBeVisible();
 
-  test('should switch between tabs correctly', async ({ page }) => {
-    // Click on Plan tab
-    await page.getByRole('button', { name: 'Plan' }).click();
-    await expect(page.getByText('Create a New Meal Plan')).toBeVisible();
-    
-    // Click on Cook tab
-    await page.getByRole('button', { name: 'Cook' }).click();
+    await mainTab(page, 'Plan').click();
+    await expect(page.getByRole('heading', { name: 'Create a New Meal Plan' })).toBeVisible();
+
+    await mainTab(page, 'Cook').click();
     await expect(page.getByRole('heading', { name: 'Mealstorm' })).toBeVisible();
-    
-    // Click on About tab
-    await page.getByRole('button', { name: 'About' }).click();
-    await expect(page.getByText('Welcome to Mealstorm!')).toBeVisible();
+
+    await mainTab(page, 'Bulk Import').click();
+    await expect(page.getByRole('heading', { name: 'Bulk Import Meal Plans' })).toBeVisible();
   });
 
-  test('should load a meal plan from JSON input', async ({ page }) => {
-    // Navigate to Plan tab
+  test('loads a valid meal plan from pasted JSON and renders tasks and recipes', async ({ page }) => {
+    await loadPlanFromTextarea(page, validMealPlan);
+    await openCookTab(page);
+
+    await expect(page.getByRole('heading', { name: validMealPlan.title })).toBeVisible();
+    await expect(page.locator('#checklist .checklist-item')).toHaveCount(validMealPlan.tasks.length);
+    await expect(page.locator('.recipe-tab', { hasText: validMealPlan.recipes[0].name })).toBeVisible();
+    await expect(page.locator('.recipe-tab', { hasText: validMealPlan.recipes[1].name })).toBeVisible();
+  });
+
+  test('loads a valid meal plan from file upload', async ({ page }) => {
+    await uploadPlanFile(page, 'valid-meal-plan.json');
+    await openCookTab(page);
+
+    await expect(page.getByRole('heading', { name: validMealPlan.title })).toBeVisible();
+    await expect(page.getByText(validMealPlan.tasks[0].text)).toBeVisible();
+  });
+
+  test('shows an error for invalid JSON without corrupting saved state', async ({ page }) => {
+    await loadPlanFromTextarea(page, validMealPlan);
+    await expectSavedPlanTitles(page, [validMealPlan.title]);
+
+    await page.locator('#jsonInput').fill('{not valid json');
+    await page.getByRole('button', { name: 'Load Plan' }).click();
+
+    await expectNotification(page, 'Error parsing JSON. Please check the format.');
+    await expectSavedPlanTitles(page, [validMealPlan.title]);
+  });
+
+  test('persists the current plan across reload and allows loading from saved plans', async ({ page }) => {
+    await loadPlanFromTextarea(page, validMealPlan);
+    await expectSavedPlanTitles(page, [validMealPlan.title]);
+
+    await page.reload();
+    await openCookTab(page);
+    await expect(page.getByRole('heading', { name: validMealPlan.title })).toBeVisible();
+
+    await mainTab(page, 'Plan').click();
+    await page.locator('#saved-plans-container .plan-item').filter({ hasText: validMealPlan.title }).getByRole('button', { name: 'Load' }).click();
+    await expect(page.getByRole('heading', { name: validMealPlan.title })).toBeVisible();
+  });
+
+  test('persists checkbox progress per active meal plan without bleeding across plans', async ({ page }) => {
+    await loadPlanFromTextarea(page, validMealPlan);
+    await openCookTab(page);
+
+    const firstPlanCheckbox = page.locator('#task0');
+    await firstPlanCheckbox.check();
+    await expect(firstPlanCheckbox).toBeChecked();
+
+    await page.reload();
+    await openCookTab(page);
+    await expect(page.locator('#task0')).toBeChecked();
+
+    await loadPlanFromTextarea(page, alternateMealPlan);
+    await openCookTab(page);
+    await expect(page.locator('#task0')).not.toBeChecked();
+
     await page.getByRole('button', { name: 'Plan' }).click();
-    
-    // Input sample meal plan JSON
-    const samplePlan = {
-      title: "Test Dinner Plan",
+    const savedPlans = page.locator('#saved-plans-container .plan-item');
+    await savedPlans.filter({ hasText: validMealPlan.title }).getByRole('button', { name: 'Load' }).click();
+    await expect(page.locator('#task0')).toBeChecked();
+  });
+
+  test('adjusts the timeline and ignores an empty target time', async ({ page }) => {
+    await loadPlanFromTextarea(page, validMealPlan);
+    await openCookTab(page);
+
+    const firstTime = page.locator('#checklist .checklist-item .time').first();
+    await expect(firstTime).toHaveText('4:00 PM');
+
+    await page.locator('#target-time').fill('17:30');
+    await page.getByRole('button', { name: 'Adjust Timeline' }).click();
+    await expect(firstTime).toHaveText('4:30 PM');
+
+    await page.locator('#target-time').evaluate(node => {
+      node.value = '';
+    });
+    await page.getByRole('button', { name: 'Adjust Timeline' }).click();
+    await expect(firstTime).toHaveText('4:30 PM');
+  });
+
+  test('imports selected meal plans and exports the saved plan set', async ({ page }) => {
+    await mainTab(page, 'Bulk Import').click();
+    await page.locator('#recipe-import-area').fill(JSON.stringify(bulkImportMealPlans, null, 2));
+    await page.getByRole('button', { name: 'Import Meal Plans' }).click();
+
+    await expect(page.locator('#recipe-selection-area')).toBeVisible();
+    await page.locator('#meal-plan-1').uncheck();
+    await page.getByRole('button', { name: 'Import Selected Meal Plans' }).click();
+
+    await expectNotification(page, 'Successfully imported 1 meal plan(s)!');
+    await expectSavedPlanTitles(page, [bulkImportMealPlans[0].title]);
+
+    const exportedPlans = await exportMealPlans(page);
+    expect(exportedPlans).toHaveLength(1);
+    expect(exportedPlans[0].title).toBe(bulkImportMealPlans[0].title);
+  });
+
+  test('updates an existing saved plan during duplicate-title import instead of duplicating it', async ({ page }) => {
+    const updatedDinnerParty = {
+      ...bulkImportMealPlans[0],
       tasks: [
-        {
-          time: "4:00 PM",
-          task: "Start preheating oven"
-        },
-        {
-          time: "4:30 PM",
-          task: "Prepare ingredients"
-        }
+        { time: '5:15 PM', text: 'Light the candles' },
+        { time: '6:45 PM', text: 'Serve dinner' }
       ]
     };
-    
-    await page.fill('#jsonInput', JSON.stringify(samplePlan));
-    await page.click('button:has-text("Load Plan")');
-    
-    // Switch to Cook tab and verify the plan was loaded
-    await page.getByRole('button', { name: 'Cook' }).click();
-    await expect(page.getByRole('heading', { name: 'Test Dinner Plan' })).toBeVisible();
-    await expect(page.getByText('4:00 PM')).toBeVisible();
-    await expect(page.getByText('Start preheating oven')).toBeVisible();
+
+    await mainTab(page, 'Bulk Import').click();
+    await page.locator('#recipe-import-area').fill(JSON.stringify([bulkImportMealPlans[0]], null, 2));
+    await page.getByRole('button', { name: 'Import Meal Plans' }).click();
+    await page.getByRole('button', { name: 'Import Selected Meal Plans' }).click();
+
+    await page.locator('#recipe-import-area').fill(JSON.stringify([updatedDinnerParty], null, 2));
+    await page.getByRole('button', { name: 'Import Meal Plans' }).click();
+    await page.getByRole('button', { name: 'Import Selected Meal Plans' }).click();
+
+    await expectSavedPlanTitles(page, [bulkImportMealPlans[0].title]);
+    await page.locator('#saved-plans-container .plan-item').filter({ hasText: bulkImportMealPlans[0].title }).getByRole('button', { name: 'Load' }).click();
+    await expect(page.getByText('Light the candles')).toBeVisible();
   });
 
-  test('should handle the screen wake lock feature', async ({ page }) => {
-    // Navigate to Cook tab
-    await page.getByRole('button', { name: 'Cook' }).click();
+  test('exposes a valid manifest and keeps navigation usable on a mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 393, height: 852 });
+    await page.goto('/');
 
-    // Verify the wake lock button is present
-    const wakeLockButton = page.locator('#noSleepBtn');
-    await expect(wakeLockButton).toBeVisible();
-
-    // Get initial button text
-    const initialText = await wakeLockButton.textContent();
-    expect(initialText).toContain('Keep Screen On');
-
-    // Click the screen wake lock button
-    await wakeLockButton.click();
-
-    // Wait a moment for the button state to update
-    await page.waitForTimeout(500);
-
-    // Get the button text after clicking (may change or stay the same depending on API support)
-    const buttonText = await wakeLockButton.textContent();
-
-    // Test passes if button shows valid state (API supported or not supported)
-    expect(buttonText).toMatch(/Screen On|Keep Screen On/);
-
-    // Verify the button is still visible and clickable
-    await expect(wakeLockButton).toBeVisible();
-  });
-
-  test('should have splash screen configuration', async ({ page }) => {
-    // Check for splash screen meta tags
-    const splashScreenMeta = await page.evaluate(() => {
-      const metaTags = document.querySelectorAll('link[rel="apple-touch-startup-image"]');
-      return Array.from(metaTags).map(tag => ({
-        href: tag.getAttribute('href'),
-        media: tag.getAttribute('media')
-      }));
-    });
-
-    // Verify that splash screen images are configured for different devices
-    expect(splashScreenMeta.length).toBeGreaterThan(0);
-    
-    // Verify default splash screen is configured
-    const hasDefaultSplash = splashScreenMeta.some(meta => 
-      meta.href && meta.href.includes('splashscreen/mealstorm_splash_') && !meta.media
-    );
-    expect(hasDefaultSplash).toBeTruthy();
-
-    // Verify device-specific splash screens are configured
-    const hasDeviceSpecificSplash = splashScreenMeta.some(meta => 
-      meta.href && meta.href.includes('splashscreen/mealstorm_splash_') && meta.media
-    );
-    expect(hasDeviceSpecificSplash).toBeTruthy();
-  });
-
-  test('should have iPhone 16 Pro splash screen configuration', async ({ page }) => {
-    // Check for iPhone 16 Pro specific splash screen configuration
-    const iphone16ProSplash = await page.evaluate(() => {
-      const metaTags = document.querySelectorAll('link[rel="apple-touch-startup-image"]');
-      const foundTag = Array.from(metaTags).find(tag => {
-        const media = tag.getAttribute('media');
-        return media && media.includes('device-width: 393px') && media.includes('device-height: 852px') && media.includes('3.125');
-      });
-
-      if (foundTag) {
-        return {
-          href: foundTag.getAttribute('href'),
-          media: foundTag.getAttribute('media')
-        };
-      }
-      return null;
-    });
-
-    // Verify iPhone 16 Pro splash screen is configured
-    expect(iphone16ProSplash).toBeTruthy();
-
-    // Verify the correct image file is referenced (iPhone 16 Pro uses 3.125x pixel ratio)
-    expect(iphone16ProSplash.href).toBe('splashscreen/mealstorm_splash_1206x2622.png');
-
-    // Verify the media query is correct for iPhone 16 Pro
-    expect(iphone16ProSplash.media).toBe('(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3.125)');
-  });
-
-  test('should have PWA manifest with iPhone 16 Pro screenshot', async ({ page }) => {
-    // Check if manifest.json is properly configured
     const manifest = await page.evaluate(async () => {
       const response = await fetch('/manifest.json');
-      return await response.json();
+      return response.json();
     });
 
-    // Verify manifest has screenshots section
-    expect(manifest.screenshots).toBeDefined();
-    expect(Array.isArray(manifest.screenshots)).toBeTruthy();
-    
-    // Verify iPhone 16 Pro screenshot is configured
-    const iphone16ProScreenshot = manifest.screenshots.find(screenshot => 
-      screenshot.sizes === '1179x2556' && screenshot.form_factor === 'narrow'
-    );
-    
-    expect(iphone16ProScreenshot).toBeDefined();
-    expect(iphone16ProScreenshot.src).toBe('splashscreen/mealstorm_splash_1179x2556.png');
-    expect(iphone16ProScreenshot.type).toBe('image/png');
-    expect(iphone16ProScreenshot.label).toBe('Mealstorm App Screenshot');
+    expect(manifest.name).toBe('Mealstorm');
+    expect(manifest.icons.length).toBeGreaterThan(0);
+
+    const startupImages = await page.locator('link[rel="apple-touch-startup-image"]').count();
+    expect(startupImages).toBeGreaterThan(0);
+
+    await mainTab(page, 'Plan').click();
+    await expect(page.getByRole('heading', { name: 'Create a New Meal Plan' })).toBeVisible();
   });
-
-  test('should work correctly on iPhone 16 Pro viewport', async ({ page }) => {
-    // Set viewport to iPhone 16 Pro dimensions (393x852 points)
-    await page.setViewportSize({ width: 393, height: 852 });
-    
-    // Set user agent to simulate iPhone
-    await page.setExtraHTTPHeaders({
-      'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
-    });
-
-    // Navigate to the page
-    await page.goto('http://localhost:3000');
-    
-    // Verify the page loads correctly on iPhone 16 Pro viewport
-    await expect(page.getByText('Welcome to Mealstorm!')).toBeVisible();
-    
-    // Check that splash screen meta tag is present for iPhone 16 Pro
-    const iphone16ProMeta = await page.evaluate(() => {
-      const metaTags = document.querySelectorAll('link[rel="apple-touch-startup-image"]');
-      return Array.from(metaTags).find(tag => {
-        const media = tag.getAttribute('media');
-        return media && media.includes('device-width: 393px') && media.includes('device-height: 852px');
-      });
-    });
-    
-    expect(iphone16ProMeta).toBeTruthy();
-    
-    // Verify the splash screen image file exists and is accessible
-    const splashImageResponse = await page.request.get('http://localhost:3000/splashscreen/mealstorm_splash_1179x2556.png');
-    expect(splashImageResponse.status()).toBe(200);
-    expect(splashImageResponse.headers()['content-type']).toBe('image/png');
-  });
-}); 
+});

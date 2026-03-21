@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Dinner Party",
+    "tasks": [
+      { "time": "5:00 PM", "text": "Set the table" },
+      { "time": "6:30 PM", "text": "Serve dinner" }
+    ],
+    "recipes": [
+      {
+        "name": "Pasta Bake",
+        "ingredients": [
+          "1 lb pasta",
+          "2 cups tomato sauce"
+        ],
+        "instructions": [
+          "Boil pasta.",
+          "Bake with sauce."
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Lunch Prep",
+    "tasks": [
+      { "time": "11:30 AM", "text": "Chop vegetables" },
+      { "time": "12:00 PM", "text": "Pack containers" }
+    ],
+    "recipes": [
+      {
+        "name": "Grain Bowl",
+        "ingredients": [
+          "2 cups rice",
+          "1 cucumber"
+        ],
+        "instructions": [
+          "Cook the rice.",
+          "Assemble bowls."
+        ]
+      }
+    ]
+  }
+]

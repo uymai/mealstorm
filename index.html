@@ -768,21 +768,54 @@
   // Checkbox state persistence
   // ─────────────────────────────────────────────
 
+  function getTaskStateStorage() {
+    try {
+      return JSON.parse(localStorage.getItem('taskCheckState') || '{}');
+    } catch (e) {
+      console.error('Could not read taskCheckState:', e);
+      return {};
+    }
+  }
+
+  function setTaskStateStorage(data) {
+    localStorage.setItem('taskCheckState', JSON.stringify(data));
+  }
+
+  function getTaskStateKey(data) {
+    return data && data.title ? data.title : '__untitled_meal_plan__';
+  }
+
+  function getActiveTaskStateKey() {
+    try {
+      const currentMealPlan = JSON.parse(localStorage.getItem('currentMealPlan') || 'null');
+      return getTaskStateKey(currentMealPlan);
+    } catch (e) {
+      console.error('Could not read currentMealPlan for checkbox state:', e);
+      return '';
+    }
+  }
+
   /**
-   * FIX: This function was referenced in the template but never defined.
-   * Now saves checkbox state to localStorage so progress survives tab switches and reloads.
+   * Save checkbox state to a plan-specific storage bucket so task progress does
+   * not bleed across different meal plans.
    */
   function updateTaskStatus(index) {
     const checkbox = document.getElementById(`task${index}`);
-    if (!checkbox) return;
-    const state = JSON.parse(localStorage.getItem('taskCheckState') || '{}');
+    const taskStateKey = getActiveTaskStateKey();
+    if (!checkbox || !taskStateKey) return;
+
+    const storage = getTaskStateStorage();
+    const state = storage[taskStateKey] || {};
     state[index] = checkbox.checked;
-    localStorage.setItem('taskCheckState', JSON.stringify(state));
+    storage[taskStateKey] = state;
+    setTaskStateStorage(storage);
   }
 
   /** Restore saved checkbox state after the checklist has been rendered. */
-  function restoreCheckboxState() {
-    const state = JSON.parse(localStorage.getItem('taskCheckState') || '{}');
+  function restoreCheckboxState(taskStateKey) {
+    if (!taskStateKey) return;
+    const storage = getTaskStateStorage();
+    const state = storage[taskStateKey] || {};
     Object.entries(state).forEach(([index, checked]) => {
       const checkbox = document.getElementById(`task${index}`);
       if (checkbox) checkbox.checked = checked;
@@ -797,7 +830,6 @@
    * Render a meal plan into the Cook tab.
    * FIX: Normalises task field names (supports both `text` and `task` keys).
    * FIX: Restores checkbox state after rendering.
-   * FIX: Clears stale checkbox state when a *different* plan is loaded.
    */
   function processData(data, savePlan = true) {
     if (!data || !data.tasks) {
@@ -867,7 +899,9 @@
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.id = `task${index}`;
-      checkbox.onchange = () => updateTaskStatus(index);
+      const persistTaskState = () => updateTaskStatus(index);
+      checkbox.addEventListener('change', persistTaskState);
+      checkbox.addEventListener('click', persistTaskState);
 
       const label = document.createElement('label');
       label.htmlFor = `task${index}`;
@@ -933,14 +967,14 @@
       });
     }
 
-    // Restore checkbox state
-    restoreCheckboxState();
-
     if (savePlan) {
       localStorage.setItem('currentMealPlan', JSON.stringify(data));
       saveTimelineToStorage(data);
       updateSavedPlansList();
     }
+
+    // Restore checkbox state for the active plan after the checklist exists.
+    restoreCheckboxState(getTaskStateKey(data));
   }
 
   // ─────────────────────────────────────────────
@@ -1055,8 +1089,6 @@
   function loadSavedPlan(key) {
     const plan = getSavedTimelines()[key];
     if (plan && plan.data) {
-      // Clear old checkbox state when loading a different plan
-      localStorage.removeItem('taskCheckState');
       processData(plan.data);
       switchTab('cook');
     }
@@ -1344,3 +1376,4 @@
 </script>
 </body>
 </html>
+    currentTaskStateKey = getTaskStateKey(data);

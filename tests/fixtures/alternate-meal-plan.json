@@ -1,0 +1,23 @@
+{
+  "title": "Weekend Brunch",
+  "tasks": [
+    { "time": "9:00 AM", "text": "Brew the coffee" },
+    { "time": "9:20 AM", "text": "Toast the bread" },
+    { "time": "9:45 AM", "text": "Serve brunch" }
+  ],
+  "recipes": [
+    {
+      "name": "Soft Scramble",
+      "ingredients": [
+        "6 eggs",
+        "2 tbsp butter",
+        "Salt"
+      ],
+      "instructions": [
+        "Whisk the eggs.",
+        "Cook gently with butter.",
+        "Season before serving."
+      ]
+    }
+  ]
+}

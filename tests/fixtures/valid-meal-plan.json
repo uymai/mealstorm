@@ -1,0 +1,35 @@
+{
+  "title": "Weeknight Dinner",
+  "tasks": [
+    { "time": "4:00 PM", "text": "Preheat oven to 425°F" },
+    { "time": "4:20 PM", "text": "Season the chicken" },
+    { "time": "5:00 PM", "text": "Plate and serve" }
+  ],
+  "recipes": [
+    {
+      "name": "Roasted Chicken",
+      "ingredients": [
+        "4 chicken thighs",
+        "1 tbsp olive oil",
+        "1 tsp kosher salt"
+      ],
+      "instructions": [
+        "Pat the chicken dry.",
+        "Rub with oil and salt.",
+        "Roast until cooked through."
+      ]
+    },
+    {
+      "name": "Lemon Green Beans",
+      "ingredients": [
+        "1 lb green beans",
+        "1 lemon",
+        "1 tbsp butter"
+      ],
+      "instructions": [
+        "Blanch the green beans.",
+        "Toss with butter and lemon zest."
+      ]
+    }
+  ]
+}
