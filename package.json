@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "playwright test",
+    "test": "playwright test --project=chromium",
+    "test:all": "playwright test",
+    "test:mobile": "playwright test --project=mobile-chrome",
+    "test:install-browsers": "playwright install --with-deps",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug"
   },
