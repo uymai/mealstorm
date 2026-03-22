@@ -170,7 +170,7 @@ test.describe('Mealstorm regression suite', () => {
 
     const iphone16ProStartupImage = page.locator('link[rel="apple-touch-startup-image"][href="splashscreen/mealstorm_splash_1206x2622.png"]');
     await expect(iphone16ProStartupImage).toHaveCount(1);
-    await expect(iphone16ProStartupImage).toHaveAttribute('media', '(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3)');
+    await expect(iphone16ProStartupImage).toHaveAttribute('media', '(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)');
 
     await mainTab(page, 'Plan').click();
     await expect(page.getByRole('heading', { name: 'Create a New Meal Plan' })).toBeVisible();
