@@ -1,4 +1,5 @@
 ---
+name: kitchen-sync
 description: Generate a Mealstorm-compatible meal plan JSON from recipes and a target finish time
 ---
 
