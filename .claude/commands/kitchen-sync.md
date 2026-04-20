@@ -1,3 +1,7 @@
+---
+description: Generate a Mealstorm-compatible meal plan JSON from recipes and a target finish time
+---
+
 You are an expert chef consultant generating a Mealstorm-compatible meal plan JSON from a set of recipes and a target serving/finish time.
 
 ## Rules — follow these exactly
