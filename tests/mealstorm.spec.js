@@ -172,6 +172,11 @@ test.describe('Mealstorm regression suite', () => {
     await expect(iphone16ProStartupImage).toHaveCount(1);
     await expect(iphone16ProStartupImage).toHaveAttribute('media', '(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)');
 
+    // iPhone 12/13/14/16 standard (most common iPhones 2020–2024)
+    const iphone12StartupImage = page.locator('link[rel="apple-touch-startup-image"][href="splashscreen/mealstorm_splash_1170x2532.png"]');
+    await expect(iphone12StartupImage).toHaveCount(1);
+    await expect(iphone12StartupImage).toHaveAttribute('media', '(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)');
+
     await mainTab(page, 'Plan').click();
     await expect(page.getByRole('heading', { name: 'Create a New Meal Plan' })).toBeVisible();
   });
